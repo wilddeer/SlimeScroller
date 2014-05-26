@@ -4,17 +4,17 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		banner: '/*!\n * Peppermint touch slider\n * v. <%= pkg.version %> | <%= pkg.homepage %>\n * Copyright <%= pkg.author.name %> | <%= pkg.author.url %>\n *\n * Depends on Event Burrito (included) | https://github.com/wilddeer/Event-Burrito\n * MIT License\n */\n',
-		bannerPure: '/*!\n * Peppermint touch slider\n * v. <%= pkg.version %> | <%= pkg.homepage %>\n * Copyright <%= pkg.author.name %> | <%= pkg.author.url %>\n *\n * Depends on Event Burrito | https://github.com/wilddeer/Event-Burrito\n * MIT License\n */\n',
+		banner: '/*!\n * Slime touch scroller\n * v. <%= pkg.version %> | <%= pkg.homepage %>\n * Copyright <%= pkg.author.name %> | <%= pkg.author.url %>\n *\n * Depends on Event Burrito (included) | https://github.com/wilddeer/Event-Burrito\n * MIT License\n */\n',
+		bannerPure: '/*!\n * Slime touch scroller\n * v. <%= pkg.version %> | <%= pkg.homepage %>\n * Copyright <%= pkg.author.name %> | <%= pkg.author.url %>\n *\n * Depends on Event Burrito | https://github.com/wilddeer/Event-Burrito\n * MIT License\n */\n',
 		uglify: {
 			options: {
 				mangle: {
-					except: ['Peppermint', '$', 'jQuery', 'EventBurrito']
+					except: ['SlimeScroller', '$', 'jQuery', 'EventBurrito']
 				}
 			},
-			peppermint: {
+			slime: {
 				files: {
-					'temp/peppermint.min.js': ['src/peppermint.js']
+					'temp/slimescroller.min.js': ['src/slimescroller.js']
 				}
 			},
 			burrito: {
@@ -30,42 +30,42 @@ module.exports = function(grunt) {
 				separator: '\n'
 			},
 			full: {
-				src: ['src/peppermint.js','src/burrito/eventburrito.js'],
-				dest: 'dist/peppermint.js',
+				src: ['src/slimescroller.js','src/burrito/eventburrito.js'],
+				dest: 'dist/slimescroller.js',
 			},
 			min: {
-				src: ['temp/peppermint.min.js','temp/eventburrito.min.js'],
-				dest: 'dist/peppermint.min.js',
+				src: ['temp/slimescroller.min.js','temp/eventburrito.min.js'],
+				dest: 'dist/slimescroller.min.js',
 			},
 			pureFull: {
 				options: {
 					banner: '<%= bannerPure %>'
 				},
-				src: ['src/peppermint.js'],
-				dest: 'dist/pure/peppermint.pure.js'
+				src: ['src/slimescroller.js'],
+				dest: 'dist/pure/slimescroller.pure.js'
 			},
 			pureMin: {
 				options: {
 					banner: '<%= bannerPure %>'
 				},
-				src: ['temp/peppermint.min.js'],
-				dest: 'dist/pure/peppermint.pure.min.js'
+				src: ['temp/slimescroller.min.js'],
+				dest: 'dist/pure/slimescroller.pure.min.js'
 			},
-			cssRequired: {
-				options: {
-					banner: '/* Peppermint minimal required styles */\n\n'
-				},
-				src: ['src/peppermint.required.css'],
-				dest: 'dist/peppermint.required.css'
-			},
-			cssSuggested: {
-				options: {
-					banner: '/* Peppermint required styles + default appearance styles */\n\n',
-					separator: '\n\n/* default appearance styles */\n'
-				},
-				src: ['src/peppermint.required.css', 'src/peppermint.appearance.css'],
-				dest: 'dist/peppermint.suggested.css'
-			}
+			//cssRequired: {
+			//	options: {
+			//		banner: '/* Slime scroller minimal required styles */\n\n'
+			//	},
+			//	src: ['src/peppermint.required.css'],
+			//	dest: 'dist/peppermint.required.css'
+			//},
+			//cssSuggested: {
+			//	options: {
+			//		banner: '/* Peppermint required styles + default appearance styles */\n\n',
+			//		separator: '\n\n/* default appearance styles */\n'
+			//	},
+			//	src: ['src/peppermint.required.css', 'src/peppermint.appearance.css'],
+			//	dest: 'dist/peppermint.suggested.css'
+			//}
 		},
 
 		watch: {

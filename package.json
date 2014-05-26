@@ -1,11 +1,11 @@
 {
-  "name": "Peppermint",
-  "version": "1.2.0",
+  "name": "SlimeScroller",
+  "version": "0.9.0",
   "license": "MIT",
-  "homepage": "https://github.com/wilddeer/Peppermint",
+  "homepage": "https://github.com/wilddeer/SlimeScroller",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wilddeer/Peppermint.git"
+    "url": "https://github.com/wilddeer/SlimeScroller.git"
   },
   "author": {
     "name": "Oleg Korsunsky",

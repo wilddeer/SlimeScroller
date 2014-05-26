@@ -1,4 +1,12 @@
-function Slime(_this, options) {
+/*!
+ * Slime touch scroller
+ * v. 0.9.0 | https://github.com/wilddeer/SlimeScroller
+ * Copyright Oleg Korsunsky | http://wd.dizaina.net/
+ *
+ * Depends on Event Burrito | https://github.com/wilddeer/Event-Burrito
+ * MIT License
+ */
+function SlimeScroller(_this, options) {
 	var noop = function() {},
 		o = options || {},
 		transitionSpeed = 300,
