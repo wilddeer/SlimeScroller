@@ -5,8 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="msapplication-tap-highlight" content="no">
 
-	<!--link rel="stylesheet" href="../src/peppermint.required.css">
-	<link rel="stylesheet" href="../src/peppermint.appearance.css"-->
+	<link rel="stylesheet" href="../src/slimescroller.css">
 
 	<style>
 		figure,
@@ -19,10 +18,13 @@
 			border: 0;
 		}
 
-		#peppermint {
-			max-width: 700px;
-			margin: 0 auto;
-			border: 1px dashed #ddd;
+		.slime > div {
+			white-space: nowrap;
+			word-wrap: normal;
+		}
+
+		.slime > div > * {
+			display: inline-block;
 		}
 	</style>
 
@@ -53,6 +55,52 @@
 
 				<figcaption>it's a cat!</figcaption>
 			</figure>
+
+			<figure>
+				<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+				<figcaption>cat!</figcaption>
+			</figure>
+
+			<figure>
+				<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+
+				<figcaption>cat!</figcaption>
+			</figure>
+
+			<figure>
+				<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
+
+				<figcaption>it's a cat!</figcaption>
+			</figure>
+
+			<figure>
+				<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+				<figcaption>cat!</figcaption>
+			</figure>
+
+			<figure>
+				<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+
+				<figcaption>cat!</figcaption>
+			</figure>
+
+			<figure>
+				<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
+
+				<figcaption>it's a cat!</figcaption>
+			</figure>
+		</div>
+	</div>
+
+	<div class="slime" id="slime_vanilla">
+		<div>
+			<figure>
+				<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+				<figcaption>cat!</figcaption>
+			</figure>
 		</div>
 	</div>
 
@@ -62,7 +110,11 @@
 	<script src="../dist/slimescroller.js"></script>
 
 	<script>
-		SlimeScroller(document.getElementById('slime_vanilla'));
+		var elements = document.getElementsByClassName('slime');
+
+		for (var i = elements.length - 1; i >= 0; i--) {
+			SlimeScroller(elements[i]);
+		};
 	</script>
 </body>
 

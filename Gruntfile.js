@@ -51,21 +51,13 @@ module.exports = function(grunt) {
 				src: ['temp/slimescroller.min.js'],
 				dest: 'dist/pure/slimescroller.pure.min.js'
 			},
-			//cssRequired: {
-			//	options: {
-			//		banner: '/* Slime scroller minimal required styles */\n\n'
-			//	},
-			//	src: ['src/peppermint.required.css'],
-			//	dest: 'dist/peppermint.required.css'
-			//},
-			//cssSuggested: {
-			//	options: {
-			//		banner: '/* Peppermint required styles + default appearance styles */\n\n',
-			//		separator: '\n\n/* default appearance styles */\n'
-			//	},
-			//	src: ['src/peppermint.required.css', 'src/peppermint.appearance.css'],
-			//	dest: 'dist/peppermint.suggested.css'
-			//}
+			cssRequired: {
+				options: {
+					banner: '/* Slime scroller */\n\n'
+				},
+				src: ['src/slimescroller.css'],
+				dest: 'dist/slimescroller.css'
+			}
 		},
 
 		watch: {
