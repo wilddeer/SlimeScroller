@@ -1,278 +1,314 @@
 function SlimeScroller(_this, options) {
-	var noop = function() {},
-		o = options || {},
-		transitionSpeed = 300,
-		animationTimer,
-		scrollerBlock,
-		contentWidth,
-		slimeWidth,
-		positionMin,
-		burrito,
-		currentPosition = 0;
+    var noop = function() {},
+        o = options || {},
+        transitionSpeed = 500,
+        bounceSpeed = 300,
+        animationTimer,
+        scrollerBlock,
+        contentWidth,
+        slimeWidth,
+        positionMin,
+        burrito,
+        currentPosition = 0;
 
-	o.cssPrefix = o.cssPrefix || '';
-	o.borderPadding = o.borderPadding || 24;
-	o.onClick = o.onClick || noop;
+    o.cssPrefix = o.cssPrefix || '';
+    o.borderPadding = o.borderPadding || 24;
+    o.onClick = o.onClick || noop;
 
-	var classes = {
-		inactive: o.cssPrefix + 'inactive',
-		active: o.cssPrefix + 'active',
-		drag: o.cssPrefix + 'drag',
-		scroller: o.cssPrefix + 'scroller'
-	};
+    var classes = {
+        inactive: o.cssPrefix + 'inactive',
+        active: o.cssPrefix + 'active',
+        drag: o.cssPrefix + 'drag',
+        scroller: o.cssPrefix + 'scroller'
+    };
 
-	// feature detects
-	var support = {
-		transforms: testProp('transform'),
-		transitions: testProp('transition')
-	};
+    // feature detects
+    // properly prefixed property stored in case property is suported
+    // `false` for unsupported properties
+    var supportedProps = {
+        transform: testProp('transform'),
+        transition: testProp('transition')
+    };
 
-	function testProp(prop) {
-		var prefixes = ['Webkit', 'Moz', 'O', 'ms'],
-			block = document.createElement('div');
+    function testProp(prop) {
+        var prefixes = ['Webkit', 'Moz', 'O', 'ms'],
+            block = document.createElement('div');
 
-		if (block.style[prop] !== undefined) return true;
+        if (block.style[prop] !== undefined) return prop;
 
-		prop = prop.charAt(0).toUpperCase() + prop.slice(1);
-		for (var i in prefixes) {
-			if (block.style[prefixes[i]+prop] !== undefined) return true;
-		}
+        prop = prop.charAt(0).toUpperCase() + prop.slice(1);
+        for (var i in prefixes) {
+            if (block.style[prefixes[i]+prop] !== undefined) return prefixes[i]+prop;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	function addEvent(el, event, func, bool) {
-		if (!event) return;
+    function addEvent(el, events, func, bool) {
+        if (!(events = events.split(' '))) return;
 
-		el.addEventListener? el.addEventListener(event, func, !!bool): el.attachEvent('on'+event, func);
-	}
+        for (var i = events.length - 1; i >= 0; i--) {
+            el.addEventListener? el.addEventListener(events[i], func, !!bool): el.attachEvent('on'+events[i], func);
+        };
+    }
 
-	function addClass(el, cl) {
-		if ((' ' + el.className + ' ').indexOf(' ' + cl + ' ') === -1) {
-			el.className = (el.className + ' ' + cl).replace(/^\s+|\s+$/g, '');
-		}
-	}
+    function removeEvent(el, events, func, bool) {
+        if (!(events = events.split(' '))) return;
 
-	function removeClass(el, cl) {
-		el.className = (' ' + el.className + ' ').replace(' ' + cl + ' ', ' ').replace(/^\s+|\s+$/g, '');
-	}
+        for (var i = events.length - 1; i >= 0; i--) {
+            el.removeEventListener? el.removeEventListener(events[i], func, !!bool): el.detachEvent('on'+events[i], func);
+        };
+    }
 
-	//changes the position of the slider (in px) with a given speed (in ms)
-	function changePos(pos, speed) {
-		var time = speed?speed+'ms':'';
+    function addClass(el, cl) {
+        if (!new RegExp('(\\s|^)'+cl+'(\\s|$)').test(el.className)) {
+            el.className += ' ' + cl;
+        }
+    }
 
-		scrollerBlock.style.webkitTransitionDuration = 
-		scrollerBlock.style.MozTransitionDuration = 
-		scrollerBlock.style.msTransitionDuration = 
-		scrollerBlock.style.OTransitionDuration = 
-		scrollerBlock.style.transitionDuration = time;
+    function removeClass(el, cl) {
+        el.className = el.className.replace(new RegExp('(\\s+|^)'+cl+'(\\s+|$)', 'g'), ' ').replace(/^\s+|\s+$/g, '');
+    }
 
-		setPos(Math.floor(pos));
-	}
+    //changes the position of the slider (in px) with a given speed (in ms)
+    function changePos(pos, speed) {
+        var time = speed?speed+'ms':'';
 
-	//fallback to `setInterval` animation for UAs with no CSS transitions
-	function changePosFallback(pos, speed) {
-		pos = Math.floor(pos);
+        scrollerBlock.style[supportedProps.transition+'Duration'] = time;
+        setPos(Math.floor(pos));
+    }
 
-		animationTimer && clearInterval(animationTimer);
+    //fallback to `setInterval` animation for UAs with no CSS transitions
+    function changePosFallback(pos, speed) {
+        pos = Math.floor(pos);
 
-		if (!speed) {
-			setPos(pos);
-			return;
-		}
+        animationTimer && clearInterval(animationTimer);
 
-		var startTime = +new Date,
-			startPos = currentPosition;
+        if (!speed) {
+            setPos(pos);
+            return;
+        }
 
-		animationTimer = setInterval(function() {
-			//rough bezier emulation
-			var diff, y,
-				elapsed = +new Date - startTime,
-				f = elapsed / speed,
-				bezier = [0, 0.7, 1, 1];
+        var startTime = +new Date,
+            startPos = currentPosition;
 
-			function getPoint(p1, p2) {
-				return (p2-p1)*f + p1;
-			}
-			
-			if (f >= 1) {
-				setPos(pos);
-				clearInterval(animationTimer);
-				return;
-			}
-		
-			diff = pos - startPos;
+        animationTimer = setInterval(function() {
+            //rough bezier emulation
+            var diff, y,
+                elapsed = +new Date - startTime,
+                f = elapsed / speed,
+                bezier = [0, 0.7, 1, 1];
 
-			y = getPoint(
-					getPoint(getPoint(bezier[0], bezier[1]), getPoint(bezier[1], bezier[2])),
-					getPoint(getPoint(bezier[1], bezier[2]), getPoint(bezier[2], bezier[3]))
-					);
+            function getPoint(p1, p2) {
+                return (p2-p1)*f + p1;
+            }
+            
+            if (f >= 1) {
+                setPos(pos);
+                clearInterval(animationTimer);
+                return;
+            }
+        
+            diff = pos - startPos;
 
-			setPos(Math.floor(y*diff + startPos));
-	    }, 15);
-	}
+            y = getPoint(
+                    getPoint(getPoint(bezier[0], bezier[1]), getPoint(bezier[1], bezier[2])),
+                    getPoint(getPoint(bezier[1], bezier[2]), getPoint(bezier[2], bezier[3]))
+                    );
 
-	//sets the position of the slider (in px)
-	function setPos(pos) {
-		scrollerBlock.style.webkitTransform = 'translate('+pos+'px,0) translateZ(0)';
-		scrollerBlock.style.msTransform = 
-		scrollerBlock.style.MozTransform = 
-		scrollerBlock.style.OTransform = 
-		scrollerBlock.style.transform = 'translateX('+pos+'px)';
+            setPos(Math.floor(y*diff + startPos));
+        }, 15);
+    }
 
-		currentPosition = pos;
-	}
+    //sets the position of the slider (in px)
+    function setPos(pos) {
+        scrollerBlock.style[supportedProps.transform] = 'translateX('+pos+'px)';
 
-	//`setPos` fallback for UAs with no CSS transforms support
-	function setPosFallback(pos) {
-		scrollerBlock.style.left = pos+'px';
+        currentPosition = pos;
+    }
 
-		currentPosition = pos;
-	}
+    //`setPos` fallback for UAs with no CSS transforms support
+    function setPosFallback(pos) {
+        scrollerBlock.style.left = pos+'px';
 
-	function scrollTo(pos) {
-		if (pos > 0) {
-			pos = 0;
-		}
-		else if (pos < positionMin) {
-			pos = positionMin;
-		}
+        currentPosition = pos;
+    }
 
-		changePos(pos, transitionSpeed);
-	}
+    function getPos() {
+        return parseFloat(getComputedStyle(scrollerBlock)[supportedProps.transform].split(/,\s*/)[4]);
+    }
 
-	function scrollToElement(element) {
-		scrollTo(-element.offsetLeft);
-	}
+    function getPosFallback() {
+        return currentPosition;
+    }
 
-	function moveElementToViewport(element, padding) {
-		var pos = -element.offsetLeft + (padding || o.borderPadding),
-			width = element.offsetWidth + 2*(padding || o.borderPadding);
+    function scrollTo(pos) {
+        if (pos > 0) {
+            pos = 0;
+        }
+        else if (pos < positionMin) {
+            pos = positionMin;
+        }
 
-		if (currentPosition < pos) {
-			scrollTo(pos);	
-		}
-		else if (currentPosition - slimeWidth > pos - width) {
-			scrollTo(pos - width + slimeWidth);
-		}
-	}
+        changePos(pos, transitionSpeed);
+    }
 
-	//init touch events
-	function touchInit() {
-		var startPosition;
+    function scrollToElement(element) {
+        scrollTo(-element.offsetLeft);
+    }
 
-		burrito = EventBurrito(_this, {
-			clickTolerance: 5,
-			start: function(event, start) {
-				//firefox doesn't want to apply the cursor from `:active` CSS rule, have to add a class :-/
-				addClass(_this, classes.drag);
-				startPosition = currentPosition;
-			},
-			move: function(event, start, diff, speed) {
-				var linearPosition = startPosition + diff.x,
-					overlap = Math.max(linearPosition, 0) || Math.min((linearPosition - positionMin), 0);
+    function moveElementToViewport(element, padding) {
+        var pos = -element.offsetLeft + (padding || o.borderPadding),
+            width = element.offsetWidth + 2*(padding || o.borderPadding);
 
-				if (Math.abs(diff.x) < 6 && diff.time < 150) return;
+        if (currentPosition < pos) {
+            scrollTo(pos);  
+        }
+        else if (currentPosition - slimeWidth > pos - width) {
+            scrollTo(pos - width + slimeWidth);
+        }
+    }
 
-				diff.x -= overlap - overlap / (Math.abs(overlap)/slimeWidth*2 + 1);
+    //init touch events
+    function touchInit() {
+        var startPosition;
 
-				//change the position of the slider appropriately
-				changePos(startPosition + diff.x);
-			},
-			end: function(event, start, diff, speed) {
-				//remove the drag class
-				removeClass(_this, classes.drag);
+        burrito = EventBurrito(_this, {
+            clickTolerance: 5,
+            start: function(event, start) {
+                //firefox doesn't want to apply the cursor from `:active` CSS rule, have to add a class :-/
+                addClass(_this, classes.drag);
+                changePos(startPosition = getPos());
+            },
+            move: function(event, start, diff, speed) {
+                var linearPosition = startPosition + diff.x,
+                    overlap = Math.max(linearPosition, 0) || Math.min((linearPosition - positionMin), 0);
 
-				if (Math.abs(diff.x) < 6 && diff.time < 150) return;
+                if (Math.abs(diff.x) < 6 && diff.time < 150) return;
 
-				if (Math.abs(speed.x) < 0.5) speed.x /= 2;
+                diff.x -= overlap - overlap / (Math.abs(overlap)/slimeWidth*2 + 1);
 
-				speed.x /= 2;
+                //change the position of the slider appropriately
+                changePos(startPosition + diff.x);
+            },
+            end: function(event, start, diff, speed) {
+                //remove the drag class
+                removeClass(_this, classes.drag);
 
-				var posDiff = speed.x*Math.pow(Math.abs(speed.x), 0.5)*transitionSpeed/1.5;
-				var targetPosition = currentPosition + posDiff;
+                if (Math.abs(diff.x) < 6 && diff.time < 150) return;
 
-				var targetOverlap = Math.abs(Math.max(targetPosition, 0) || Math.min((targetPosition - positionMin), 0));
-				var overlap = Math.min(targetOverlap / 5, 150);
-				var overlapDiff = targetOverlap - overlap;
-				var targetSpeed = Math.max(0, transitionSpeed - (overlapDiff / (Math.abs(posDiff) + 1))*transitionSpeed);
+                speed.x /= 2;
 
-				if (targetPosition > 0) {
-					targetSpeed && changePos(overlap, targetSpeed);
-					setTimeout(function() {
-						changePos(0, transitionSpeed);
-					}, targetSpeed);
-				}
-				else if (targetPosition < positionMin) {
-					targetSpeed && changePos(positionMin - overlap, targetSpeed);
-					setTimeout(function() {
-						changePos(positionMin, transitionSpeed);
-					}, targetSpeed);
-				}
-				else {
-					changePos(targetPosition, transitionSpeed);
-				}
-			},
-			click: function(event) {
-				o.onClick(event);
-			}
-		});
-	}
+                var posDiff = speed.x*Math.pow(Math.abs(speed.x), 0.5)*transitionSpeed/2;
+                var targetPosition = currentPosition + posDiff;
 
-	function widthChanged() {
-		getWidths();
-		scrollTo(currentPosition);
-	}
+                var targetOverlap = Math.abs(Math.max(targetPosition, 0) || Math.min((targetPosition - positionMin), 0));
+                var overlap = Math.pow(targetOverlap, 0.7) / (Math.pow(targetOverlap, 0.7)/(transitionSpeed) + 1);
+                console.log(targetOverlap);
+                console.log(overlap);
+                //var overlap = targetOverlap / (transitionSpeed / 70);
+                var overlapDiff = targetOverlap - overlap;
+                var targetSpeed = Math.max(0, transitionSpeed - (overlapDiff / (Math.abs(posDiff) + 1))*transitionSpeed);
 
-	function getWidths() {
-		slimeWidth = _this.offsetWidth;
-		contentWidth = scrollerBlock.offsetWidth;
-		positionMin = slimeWidth - contentWidth;
-	}
+                if (targetPosition > 0) {
+                    (function() {
+                        if (targetSpeed) {
+                            changePos(overlap, targetSpeed);
+                            addEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
+                        }
+                        else {
+                            bounceBack();
+                        }
 
-	function setup() {
-		//If the UA doesn't support css transforms or transitions -- use fallback functions.
-		//Separate functions instead of checks for better performance.
-		if (!support.transforms || !!window.opera) setPos = setPosFallback;
-		if (!support.transitions || !!window.opera) changePos = changePosFallback;
+                        function bounceBack() {
+                            changePos(0, bounceSpeed);
 
-		scrollerBlock = _this.children[0];
+                            removeEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
+                        }
+                    })();
+                }
+                else if (targetPosition < positionMin) {
+                    (function() {
+                        if (targetSpeed) {
+                            changePos(positionMin - overlap, targetSpeed);
+                            addEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
+                        }
+                        else {
+                            bounceBack();
+                        }
 
-		addEvent(_this, 'focus', function(event) {
-			_this.scrollLeft = 0;
-			setTimeout(function() {
-				_this.scrollLeft = 0;
-			}, 0);
-			event.target && moveElementToViewport(event.target);
-		}, true);
+                        function bounceBack() {
+                            changePos(positionMin, bounceSpeed);
 
-		/* set classes */
-		addClass(scrollerBlock, classes.scroller);
-		addClass(_this, classes.active);
-		removeClass(_this, classes.inactive);
+                            removeEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
+                        }
+                    })();
+                }
+                else {
+                    changePos(targetPosition, transitionSpeed);
+                }
+            },
+            click: function(event) {
+                o.onClick(event);
+            }
+        });
+    }
 
-		/* get widths */
-		getWidths();
+    function widthChanged() {
+        getWidths();
+        scrollTo(currentPosition);
+    }
 
-		/* init touch events */
-		touchInit();
+    function getWidths() {
+        slimeWidth = _this.offsetWidth;
+        contentWidth = scrollerBlock.offsetWidth;
+        positionMin = slimeWidth - contentWidth;
+    }
 
-		/* watch for width changes */
-		addEvent(window, 'resize', widthChanged);
-		addEvent(window, 'orientationchange', widthChanged);
-	}
+    function setup() {
+        //If the UA doesn't support css transforms or transitions -- use fallback functions.
+        //Separate functions instead of checks for better performance.
+        if (!supportedProps.transform || !!window.opera) setPos = setPosFallback;
+        if (!supportedProps.transition || !!window.opera) changePos = changePosFallback;
+        if (!supportedProps.transform || !!window.opera || !window.getComputedStyle) getPos = getPosFallback;
 
-	setup();
+        scrollerBlock = _this.children[0];
 
-	return {
-		getClicksAllowed: function() {
-			return burrito.getClicksAllowed();
-		},
+        addEvent(_this, 'focus', function(event) {
+            _this.scrollLeft = 0;
+            setTimeout(function() {
+                _this.scrollLeft = 0;
+            }, 0);
+            event.target && moveElementToViewport(event.target);
+        }, true);
 
-		scrollTo: scrollTo,
+        /* set classes */
+        addClass(scrollerBlock, classes.scroller);
+        addClass(_this, classes.active);
+        removeClass(_this, classes.inactive);
 
-		scrollToElement: scrollToElement,
+        /* get widths */
+        getWidths();
 
-		moveElementToViewport: moveElementToViewport
-	}
+        /* init touch events */
+        touchInit();
+
+        /* watch for width changes */
+        addEvent(window, 'resize', widthChanged);
+        addEvent(window, 'orientationchange', widthChanged);
+    }
+
+    setup();
+
+    return {
+        getClicksAllowed: function() {
+            return burrito.getClicksAllowed();
+        },
+
+        scrollTo: scrollTo,
+
+        scrollToElement: scrollToElement,
+
+        moveElementToViewport: moveElementToViewport
+    }
 }
