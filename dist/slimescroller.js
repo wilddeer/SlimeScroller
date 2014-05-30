@@ -211,46 +211,64 @@ function SlimeScroller(_this, options) {
                 var targetPosition = currentPosition + posDiff;
 
                 var targetOverlap = Math.abs(Math.max(targetPosition, 0) || Math.min((targetPosition - positionMin), 0));
-                var overlap = Math.pow(targetOverlap, 0.7) / (Math.pow(targetOverlap, 0.7)/(transitionSpeed) + 1);
+                //var overlap = Math.pow(targetOverlap, 0.7) / (Math.pow(targetOverlap, 0.7)/(transitionSpeed) + 1);
+                var overlap = Math.min(targetOverlap / (transitionSpeed / 70), 150);
                 console.log(targetOverlap);
                 console.log(overlap);
-                //var overlap = targetOverlap / (transitionSpeed / 70);
                 var overlapDiff = targetOverlap - overlap;
                 var targetSpeed = Math.max(0, transitionSpeed - (overlapDiff / (Math.abs(posDiff) + 1))*transitionSpeed);
 
                 if (targetPosition > 0) {
-                    (function() {
-                        if (targetSpeed) {
-                            changePos(overlap, targetSpeed);
-                            addEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
-                        }
-                        else {
-                            bounceBack();
-                        }
+                    if (o.timer) {
+                        console.log('tmr');
+                        targetSpeed && changePos(overlap, targetSpeed);
+                        setTimeout(function() {
+                            changePos(0, transitionSpeed);
+                        }, targetSpeed);
+                    }
+                    else {
+                        (function() {
+                            if (targetSpeed) {
+                                changePos(overlap, targetSpeed);
+                                addEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
+                            }
+                            else {
+                                bounceBack();
+                            }
 
-                        function bounceBack() {
-                            changePos(0, bounceSpeed);
+                            function bounceBack() {
+                                changePos(0, bounceSpeed);
 
-                            removeEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
-                        }
-                    })();
+                                removeEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
+                            }
+                        })();
+                    }
                 }
                 else if (targetPosition < positionMin) {
-                    (function() {
-                        if (targetSpeed) {
-                            changePos(positionMin - overlap, targetSpeed);
-                            addEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
-                        }
-                        else {
-                            bounceBack();
-                        }
+                    if (o.timer) {
+                        console.log('tmr');
+                        targetSpeed && changePos(positionMin - overlap, targetSpeed);
+                        setTimeout(function() {
+                            changePos(positionMin, transitionSpeed);
+                        }, targetSpeed);
+                    }
+                    else {
+                        (function() {
+                            if (targetSpeed) {
+                                changePos(positionMin - overlap, targetSpeed);
+                                addEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
+                            }
+                            else {
+                                bounceBack();
+                            }
 
-                        function bounceBack() {
-                            changePos(positionMin, bounceSpeed);
+                            function bounceBack() {
+                                changePos(positionMin, bounceSpeed);
 
-                            removeEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
-                        }
-                    })();
+                                removeEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
+                            }
+                        })();
+                    }
                 }
                 else {
                     changePos(targetPosition, transitionSpeed);
@@ -281,6 +299,13 @@ function SlimeScroller(_this, options) {
         if (!supportedProps.transform || !!window.opera || !window.getComputedStyle) getPos = getPosFallback;
 
         scrollerBlock = _this.children[0];
+
+        /* recalc the size when image is loaded */
+        var images = scrollerBlock.getElementsByTagName('img');
+
+        for (var i = images.length - 1; i >= 0; i--) {
+            addEvent(scrollerBlock, 'load error', widthChanged);
+        };
 
         addEvent(_this, 'focus', function(event) {
             _this.scrollLeft = 0;
