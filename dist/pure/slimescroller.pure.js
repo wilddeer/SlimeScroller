@@ -9,8 +9,10 @@
 function SlimeScroller(_this, options) {
     var noop = function() {},
         o = options || {},
-        transitionSpeed = 500,
+        transitionSpeed = 300,
         bounceSpeed = 300,
+        overlapModifier = 1 / (transitionSpeed / 60),
+        maxOverlap = 150,
         animationTimer,
         scrollerBlock,
         contentWidth,
@@ -212,9 +214,7 @@ function SlimeScroller(_this, options) {
 
                 var targetOverlap = Math.abs(Math.max(targetPosition, 0) || Math.min((targetPosition - positionMin), 0));
                 //var overlap = Math.pow(targetOverlap, 0.7) / (Math.pow(targetOverlap, 0.7)/(transitionSpeed) + 1);
-                var overlap = Math.min(targetOverlap / (transitionSpeed / 70), 150);
-                console.log(targetOverlap);
-                console.log(overlap);
+                var overlap = Math.min(targetOverlap*overlapModifier, maxOverlap);
                 var overlapDiff = targetOverlap - overlap;
                 var targetSpeed = Math.max(0, transitionSpeed - (overlapDiff / (Math.abs(posDiff) + 1))*transitionSpeed);
 
