@@ -80,7 +80,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bumpx');
-    grunt.registerTask('build', ['bump', 'uglify', 'concat']);
+    grunt.registerTask('build', ['uglify', 'concat']);
     grunt.registerTask('w', ['build', 'watch']);
     grunt.registerTask('default', 'build');
 };

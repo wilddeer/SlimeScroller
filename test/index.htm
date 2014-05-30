@@ -14,17 +14,12 @@
 			display: block;
 		}
 
+		figure {
+			margin: 1em;
+		}
+
 		a img {
-			border: 0;
-		}
-
-		.slime > div {
-			white-space: nowrap;
-			word-wrap: normal;
-		}
-
-		.slime > div > * {
-			display: inline-block;
+			border: 0.5em solid #eee;
 		}
 	</style>
 
@@ -34,74 +29,102 @@
 </head>
 
 <body>
-	<h1>test</h1>
+	<h1>Tests!</h1>
+
+	<h3>default</h3>
 
 	<div class="slime">
-		<div>
-			<figure>
-				<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
 
-				<figcaption>cat!</figcaption>
-			</figure>
+			<figcaption>cat!</figcaption>
+		</figure>
 
-			<figure>
-				<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+		<figure>
+			<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
 
-				<figcaption>cat!</figcaption>
-			</figure>
+			<figcaption>cat!</figcaption>
+		</figure>
 
-			<figure>
-				<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
+		<figure>
+			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
 
-				<figcaption>it's a cat!</figcaption>
-			</figure>
+			<figcaption>it's a cat!</figcaption>
+		</figure>
 
-			<figure>
-				<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
 
-				<figcaption>cat!</figcaption>
-			</figure>
+			<figcaption>cat!</figcaption>
+		</figure>
 
-			<figure>
-				<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+		<figure>
+			<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
 
-				<figcaption>cat!</figcaption>
-			</figure>
+			<figcaption>cat!</figcaption>
+		</figure>
 
-			<figure>
-				<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
+		<figure>
+			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
 
-				<figcaption>it's a cat!</figcaption>
-			</figure>
+			<figcaption>it's a cat!</figcaption>
+		</figure>
 
-			<figure>
-				<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
 
-				<figcaption>cat!</figcaption>
-			</figure>
+			<figcaption>cat!</figcaption>
+		</figure>
 
-			<figure>
-				<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+		<figure>
+			<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
 
-				<figcaption>cat!</figcaption>
-			</figure>
+			<figcaption>cat!</figcaption>
+		</figure>
 
-			<figure>
-				<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
+		<figure>
+			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
 
-				<figcaption>it's a cat!</figcaption>
-			</figure>
-		</div>
+			<figcaption>it's a cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
+
+			<figcaption>it's a cat!</figcaption>
+		</figure>
 	</div>
 
-	<div class="slime">
-		<div>
-			<figure>
-				<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+	<h3><code>disableIfFit: false</code>, <code>slime-right</code></h3>
 
-				<figcaption>cat!</figcaption>
-			</figure>
-		</div>
+	<div class="slime slime-right">
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+	</div>
+
+	<h3><code>slime-left</code></h3>
+
+	<div class="slime slime-left">
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
 	</div>
 
 	<h2>API test</h2>
@@ -112,9 +135,15 @@
 	<script>
 		var elements = document.getElementsByClassName('slime');
 
-		for (var i = elements.length - 1; i >= 0; i--) {
+		SlimeScroller(elements[0]);
+		SlimeScroller(elements[1], {
+			disableIfFit: false
+		});
+		SlimeScroller(elements[2]);
+
+		/*for (var i = elements.length - 1; i >= 0; i--) {
 			SlimeScroller(elements[i]);
-		};
+		};*/
 	</script>
 </body>
 

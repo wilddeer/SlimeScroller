@@ -1,6 +1,6 @@
 /*!
  * Slime touch scroller
- * v. 0.9.0 | https://github.com/wilddeer/SlimeScroller
+ * v. 0.10.0 | https://github.com/wilddeer/SlimeScroller
  * Copyright Oleg Korsunsky | http://wd.dizaina.net/
  *
  * Depends on Event Burrito | https://github.com/wilddeer/Event-Burrito
@@ -16,19 +16,22 @@ function SlimeScroller(_this, options) {
         animationTimer,
         scrollerBlock,
         contentWidth,
+        contentFits,
         slimeWidth,
         positionMin,
         burrito,
         currentPosition = 0;
 
-    o.cssPrefix = o.cssPrefix || '';
-    o.borderPadding = o.borderPadding || 24;
+    o.cssPrefix = o.cssPrefix!==undefined? o.cssPrefix: 'slime-';
+    o.borderPadding = o.borderPadding!==undefined? o.borderPadding: 24;
+    o.disableIfFit = o.disableIfFit!==undefined? o.disableIfFit: true;
     o.onClick = o.onClick || noop;
 
     var classes = {
         inactive: o.cssPrefix + 'inactive',
         active: o.cssPrefix + 'active',
         drag: o.cssPrefix + 'drag',
+        touch: o.cssPrefix + 'touch',
         scroller: o.cssPrefix + 'scroller'
     };
 
@@ -80,11 +83,9 @@ function SlimeScroller(_this, options) {
         el.className = el.className.replace(new RegExp('(\\s+|^)'+cl+'(\\s+|$)', 'g'), ' ').replace(/^\s+|\s+$/g, '');
     }
 
-    //changes the position of the slider (in px) with a given speed (in ms)
+    //changes position of the slider (in px) with a given speed (in ms)
     function changePos(pos, speed) {
-        var time = speed?speed+'ms':'';
-
-        scrollerBlock.style[supportedProps.transition+'Duration'] = time;
+        scrollerBlock.style[supportedProps.transition+'Duration'] = speed?speed+'ms':'';
         setPos(Math.floor(pos));
     }
 
@@ -152,7 +153,7 @@ function SlimeScroller(_this, options) {
         return currentPosition;
     }
 
-    function scrollTo(pos) {
+    function scrollTo(pos, speed) {
         if (pos > 0) {
             pos = 0;
         }
@@ -160,22 +161,22 @@ function SlimeScroller(_this, options) {
             pos = positionMin;
         }
 
-        changePos(pos, transitionSpeed);
+        changePos(pos, speed!==undefined?speed:transitionSpeed);
     }
 
-    function scrollToElement(element) {
-        scrollTo(-element.offsetLeft);
+    function scrollToElement(element, speed) {
+        scrollTo(-element.offsetLeft, speed!==undefined?speed:transitionSpeed);
     }
 
-    function moveElementToViewport(element, padding) {
+    function moveElementToViewport(element, padding, speed) {
         var pos = -element.offsetLeft + (padding || o.borderPadding),
             width = element.offsetWidth + 2*(padding || o.borderPadding);
 
         if (currentPosition < pos) {
-            scrollTo(pos);  
+            scrollTo(pos, speed!==undefined?speed:transitionSpeed);  
         }
         else if (currentPosition - slimeWidth > pos - width) {
-            scrollTo(pos - width + slimeWidth);
+            scrollTo(pos - width + slimeWidth, speed!==undefined?speed:transitionSpeed);
         }
     }
 
@@ -263,13 +264,27 @@ function SlimeScroller(_this, options) {
 
     function widthChanged() {
         getWidths();
-        scrollTo(currentPosition);
+        checkFit();
+        scrollTo(currentPosition, 0);
+        if ((!contentFits || !o.disableIfFit) && !burrito) {
+            touchInit();
+            addClass(_this, classes.touch);
+        }
+        else if (contentFits && burrito) {
+            burrito.kill();
+            burrito = undefined;
+            removeClass(_this, classes.touch);
+        }
     }
 
     function getWidths() {
         slimeWidth = _this.offsetWidth;
         contentWidth = scrollerBlock.offsetWidth;
         positionMin = slimeWidth - contentWidth;
+    }
+
+    function checkFit() {
+        return contentFits = slimeWidth >= contentWidth;
     }
 
     function setup() {
@@ -279,15 +294,24 @@ function SlimeScroller(_this, options) {
         if (!supportedProps.transition || !!window.opera) changePos = changePosFallback;
         if (!supportedProps.transform || !!window.opera || !window.getComputedStyle) getPos = getPosFallback;
 
-        scrollerBlock = _this.children[0];
+        scrollerBlock = document.createElement('div');
 
-        /* recalc the size when image is loaded */
+        //wrap children
+        for (var i = 0, l = _this.children.length; i < l; i++) {
+            scrollerBlock.appendChild(_this.children[0]);
+        }
+
+        _this.appendChild(scrollerBlock);
+
+        //recalc the size when images load
         var images = scrollerBlock.getElementsByTagName('img');
 
         for (var i = images.length - 1; i >= 0; i--) {
             addEvent(scrollerBlock, 'load error', widthChanged);
         };
 
+        //prevent focus bug (see http://wd.dizaina.net/en/internet-maintenance/js-sliders-and-the-tab-key/)
+        //and move focused element to viewport
         addEvent(_this, 'focus', function(event) {
             _this.scrollLeft = 0;
             setTimeout(function() {
@@ -296,18 +320,18 @@ function SlimeScroller(_this, options) {
             event.target && moveElementToViewport(event.target);
         }, true);
 
-        /* set classes */
+        //set classes
         addClass(scrollerBlock, classes.scroller);
         addClass(_this, classes.active);
         removeClass(_this, classes.inactive);
 
-        /* get widths */
-        getWidths();
+        //get widths
+        widthChanged();
 
-        /* init touch events */
-        touchInit();
+        //init touch events
+        //touchInit();
 
-        /* watch for width changes */
+        //watch for width changes
         addEvent(window, 'resize', widthChanged);
         addEvent(window, 'orientationchange', widthChanged);
     }

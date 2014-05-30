@@ -3,13 +3,30 @@
 .slime {
 	overflow: auto;
 	text-align: center;
+	white-space: nowrap;
 }
 
-.slime.active {
+.slime.slime-left {
+	text-align: left;
+}
+
+.slime.slime-right {
+	text-align: right;
+}
+
+.slime > *,
+.slime .slime-scroller > * {
+	display: inline-block;
+}
+
+.slime.slime-active {
 	position: relative;
 	overflow: hidden;
 	padding-left: 0;
 	padding-right: 0;
+}
+
+.slime.slime-active.slime-touch {
 	-ms-touch-action: pan-y;
 	touch-action: pan-y;
 	-webkit-tap-highlight-color: transparent;
@@ -24,19 +41,19 @@
 	cursor: grab;
 }
 
-.slime.active .scroller {
+.slime.slime-active .slime-scroller {
 	display: inline-block;
 	position: relative;
 	min-width: 100%;
 }
 
-.slime.active a:active,
-.slime.active a:active img {
+.slime.slime-active a:active,
+.slime.slime-active a:active img {
 	outline: none;
 }
 
-.slime.active,
-.slime.active .scroller {
+.slime.slime-active,
+.slime.slime-active .slime-scroller {
 	-webkit-transform: translate3d(0,0,0);
 	-ms-transform: translate3d(0,0,0);
 	-moz-transform: translate3d(0,0,0);
@@ -47,8 +64,8 @@
 	backface-visibility: hidden;
 }
 
-.slime.active.drag,
-.slime.active.drag * {
+.slime.slime-active.slime-drag,
+.slime.slime-active.slime-drag * {
 	cursor: move;
 	cursor: -webkit-grabbing;
 	cursor: -moz-grabbing;
