@@ -1,6 +1,5 @@
 function SlimeScroller(_this, options) {
     var noop = function() {},
-        o = options || {},
         transitionSpeed = 400,
         bounceSpeed = 300,
         overlapModifier = 1 / (transitionSpeed / 60),
@@ -14,10 +13,14 @@ function SlimeScroller(_this, options) {
         burrito,
         currentPosition = 0;
 
-    o.cssPrefix = o.cssPrefix!==undefined? o.cssPrefix: 'slime-';
-    o.borderPadding = o.borderPadding!==undefined? o.borderPadding: 24;
-    o.disableIfFit = o.disableIfFit!==undefined? o.disableIfFit: true;
-    o.onClick = o.onClick || noop;
+    var o = {
+        cssPrefix: 'slime-',
+        borderPadding: 24,
+        disableIfFit: true,
+        onClick: noop
+    };
+
+    options && mergeObjects(o, options);
 
     var classes = {
         inactive: o.cssPrefix + 'inactive',
@@ -34,6 +37,14 @@ function SlimeScroller(_this, options) {
         transform: testProp('transform'),
         transition: testProp('transition')
     };
+
+    function mergeObjects(targetObj, sourceObject) {
+        for (key in sourceObject) {
+            if (sourceObject.hasOwnProperty(key)) {
+                targetObj[key] = sourceObject[key];
+            }
+        }
+    }
 
     function testProp(prop) {
         var prefixes = ['Webkit', 'Moz', 'O', 'ms'],
