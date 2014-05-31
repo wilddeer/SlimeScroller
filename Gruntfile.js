@@ -81,6 +81,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bumpx');
     grunt.registerTask('build', ['uglify', 'concat']);
+    grunt.registerTask('v', ['bump', 'build', 'watch']);
     grunt.registerTask('w', ['build', 'watch']);
     grunt.registerTask('default', 'build');
 };
