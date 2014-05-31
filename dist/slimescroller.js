@@ -1,6 +1,6 @@
 /*!
  * Slime touch scroller
- * v. 0.10.1 | https://github.com/wilddeer/SlimeScroller
+ * v. 0.10.2 | https://github.com/wilddeer/SlimeScroller
  * Copyright Oleg Korsunsky | http://wd.dizaina.net/
  *
  * Depends on Event Burrito (included) | https://github.com/wilddeer/Event-Burrito
@@ -21,6 +21,7 @@ function SlimeScroller(_this, options) {
         burrito,
         currentPosition = 0;
 
+    //default options
     var o = {
         cssPrefix: 'slime-',
         borderPadding: 24,
@@ -28,6 +29,7 @@ function SlimeScroller(_this, options) {
         onClick: noop
     };
 
+    //merge user options into defaults
     options && mergeObjects(o, options);
 
     var classes = {
@@ -38,9 +40,9 @@ function SlimeScroller(_this, options) {
         scroller: o.cssPrefix + 'scroller'
     };
 
-    // feature detects
-    // properly prefixed property stored in case property is suported
-    // `false` for unsupported properties
+    //feature detects
+    //properly prefixed property stored in case property is suported
+    //`false` for unsupported properties
     var supportedProps = {
         transform: testProp('transform'),
         transition: testProp('transition')
@@ -273,7 +275,7 @@ function SlimeScroller(_this, options) {
         });
     }
 
-    function widthChanged() {
+    function onWidthChange() {
         getWidths();
         checkFit();
         scrollTo(currentPosition, 0);
@@ -318,7 +320,7 @@ function SlimeScroller(_this, options) {
         var images = scrollerBlock.getElementsByTagName('img');
 
         for (var i = images.length - 1; i >= 0; i--) {
-            addEvent(scrollerBlock, 'load error', widthChanged);
+            addEvent(scrollerBlock, 'load error', onWidthChange);
         };
 
         //prevent focus bug (see http://wd.dizaina.net/en/internet-maintenance/js-sliders-and-the-tab-key/)
@@ -337,18 +339,19 @@ function SlimeScroller(_this, options) {
         removeClass(_this, classes.inactive);
 
         //get widths
-        widthChanged();
+        onWidthChange();
 
         //init touch events
         //touchInit();
 
         //watch for width changes
-        addEvent(window, 'resize', widthChanged);
-        addEvent(window, 'orientationchange', widthChanged);
+        addEvent(window, 'resize', onWidthChange);
+        addEvent(window, 'orientationchange', onWidthChange);
     }
 
     setup();
 
+    //expose the API
     return {
         getClicksAllowed: function() {
             return burrito.getClicksAllowed();
@@ -358,7 +361,12 @@ function SlimeScroller(_this, options) {
 
         scrollToElement: scrollToElement,
 
-        moveElementToViewport: moveElementToViewport
+        moveElementToViewport: moveElementToViewport,
+
+        //invoke this when Slime's width or display state is changed
+        recalcWidth: function() {
+            onWidthChange();
+        }
     }
 }
 /*!
