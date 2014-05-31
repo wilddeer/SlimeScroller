@@ -1,6 +1,6 @@
 /*!
  * Slime touch scroller
- * v. 0.10.2 | https://github.com/wilddeer/SlimeScroller
+ * v. 0.10.3 | https://github.com/wilddeer/SlimeScroller
  * Copyright Oleg Korsunsky | http://wd.dizaina.net/
  *
  * Depends on Event Burrito (included) | https://github.com/wilddeer/Event-Burrito
@@ -26,7 +26,8 @@ function SlimeScroller(_this, options) {
         cssPrefix: 'slime-',
         borderPadding: 24,
         disableIfFit: true,
-        onClick: noop
+        onClick: noop,
+        onSetup: undefined //setup callback
     };
 
     //merge user options into defaults
@@ -347,6 +348,11 @@ function SlimeScroller(_this, options) {
         //watch for width changes
         addEvent(window, 'resize', onWidthChange);
         addEvent(window, 'orientationchange', onWidthChange);
+
+        //API callback, timeout to expose the API first
+        setTimeout(function() {
+            o.onSetup && o.onSetup();
+        }, 0);
     }
 
     setup();
@@ -364,9 +370,7 @@ function SlimeScroller(_this, options) {
         moveElementToViewport: moveElementToViewport,
 
         //invoke this when Slime's width or display state is changed
-        recalcWidth: function() {
-            onWidthChange();
-        }
+        recalcWidth: onWidthChange
     }
 }
 /*!
