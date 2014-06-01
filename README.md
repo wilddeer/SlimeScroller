@@ -1,7 +1,5 @@
 #Slime touch scroller
 
-[Check out the demo](http://wd.dizaina.net/en/scripts/peppermint/)
-
 Responsive touch-enabled scroller
 
 - Works with mouse, [Touch Events](http://www.w3.org/TR/touch-events/), [Pointer Events](http://www.w3.org/TR/pointerevents/), old [IE10 Pointer Events](http://msdn.microsoft.com/en-us/library/ie/hh673557\(v=vs.85\).aspx)
