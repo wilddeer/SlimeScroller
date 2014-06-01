@@ -46,7 +46,7 @@ Place anything you want within the Slime's block. All the elements will recieve 
 Slime can take settings object as an optional second parameter (first when using jQuery). Default settings:
 
     {
-      //transition time when changing slides, ms
+      //transition time, ms
       transitionSpeed: 400,
 
       //Prefix to be used with Slime classes,
@@ -63,7 +63,7 @@ Slime can take settings object as an optional second parameter (first when using
       disableIfFit: true,
 
       //Callback function, invoked when proper click happens
-      //(not after dragging).
+      //(not during or immediately after mousedrag).
       //Recieves click event object as a parameter
       onClick: undefined,
     
@@ -106,6 +106,10 @@ Move element to viewport.
 `padding` - padding from the element to the edge of the container, *optional*;  
 
 `speed` - speed in ms, *optional*.
+
+###`getClicksAllowed()`
+
+Useful when listening for clicks on some inner element. Returns `true` if the click was an actual proper click, or `false` in case it was a result of mousedrag.
 
 ###`recalcWidth()`
 
