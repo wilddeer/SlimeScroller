@@ -8,6 +8,17 @@
 	<link rel="stylesheet" href="../src/slimescroller.css">
 
 	<style>
+		body {
+            font-family: sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: normal;
+        }
+
 		figure,
 		figcaption,
 		section {
@@ -31,9 +42,9 @@
 <body>
 	<h1>Tests!</h1>
 
-	<h3>default</h3>
+	<h3>Vanilla JS</h3>
 
-	<div class="slime">
+	<div class="slime inactive" id="slime">
 		<figure>
 			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
 
@@ -107,9 +118,67 @@
 		</figure>
 	</div>
 
-	<h3><code>disableIfFit: false</code>, <code>slime-right</code></h3>
+	<h3>jQuery</h3>
 
-	<div class="slime slime-right">
+	<div class="slime jquery-test">
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
+
+			<figcaption>it's a cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
+
+			<figcaption>it's a cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
+
+			<figcaption>it's a cat!</figcaption>
+		</figure>
+	</div>
+
+	<h3>disableIfFit: false, slime-right</h3>
+
+	<div class="slime slime-right right-test">
 		<figure>
 			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
 
@@ -117,9 +186,9 @@
 		</figure>
 	</div>
 
-	<h3><code>slime-left</code></h3>
+	<h3>slime-left</h3>
 
-	<div class="slime slime-left">
+	<div class="slime slime-left left-test">
 		<figure>
 			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
 
@@ -133,16 +202,16 @@
 	<script src="../dist/slimescroller.js"></script>
 
 	<script>
-		var elements = document.getElementsByClassName('slime');
+		Slime(document.getElementById('slime'));
 
-		SlimeScroller(elements[0]);
-		SlimeScroller(elements[1], {
+		$('.jquery-test').Slime();
+		$('.right-test').Slime({
 			disableIfFit: false
 		});
-		SlimeScroller(elements[2]);
+		$('.left-test').Slime();
 
 		/*for (var i = elements.length - 1; i >= 0; i--) {
-			SlimeScroller(elements[i]);
+			Slime(elements[i]);
 		};*/
 	</script>
 </body>

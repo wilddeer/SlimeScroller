@@ -26,7 +26,7 @@
 	padding-right: 0;
 }
 
-.slime.slime-active.slime-touch {
+.slime.slime-active.slime-drag {
 	-ms-touch-action: pan-y;
 	touch-action: pan-y;
 	-webkit-tap-highlight-color: transparent;
@@ -45,6 +45,9 @@
 	display: inline-block;
 	position: relative;
 	min-width: 100%;
+	/* ie7 fallback */
+	*display: inline;
+	zoom: 1;
 }
 
 .slime.slime-active a:active,
@@ -64,8 +67,8 @@
 	backface-visibility: hidden;
 }
 
-.slime.slime-active.slime-drag,
-.slime.slime-active.slime-drag * {
+.slime.slime-active.slime-grabbing,
+.slime.slime-active.slime-grabbing * {
 	cursor: move;
 	cursor: -webkit-grabbing;
 	cursor: -moz-grabbing;

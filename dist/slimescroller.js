@@ -1,12 +1,12 @@
 /*!
  * Slime touch scroller
- * v. 0.10.3 | https://github.com/wilddeer/SlimeScroller
+ * v. 0.11.0 | https://github.com/wilddeer/SlimeScroller
  * Copyright Oleg Korsunsky | http://wd.dizaina.net/
  *
  * Depends on Event Burrito (included) | https://github.com/wilddeer/Event-Burrito
  * MIT License
  */
-function SlimeScroller(_this, options) {
+function Slime(_this, options) {
     var noop = function() {},
         transitionSpeed = 400,
         bounceSpeed = 300,
@@ -36,8 +36,8 @@ function SlimeScroller(_this, options) {
     var classes = {
         inactive: o.cssPrefix + 'inactive',
         active: o.cssPrefix + 'active',
+        grabbing: o.cssPrefix + 'grabbing',
         drag: o.cssPrefix + 'drag',
-        touch: o.cssPrefix + 'touch',
         scroller: o.cssPrefix + 'scroller'
     };
 
@@ -159,6 +159,29 @@ function SlimeScroller(_this, options) {
         currentPosition = pos;
     }
 
+    function bounce(speed, turnPos, finalPos) {
+        if (speed) {
+            changePos(turnPos, speed);
+            addEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
+        }
+        else {
+            bounceBack();
+        }
+
+        function bounceBack() {
+            changePos(finalPos, bounceSpeed);
+
+            removeEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
+        }
+    }
+
+    function bounceFallback(speed, turnPos, finalPos) {
+        speed && changePos(turnPos, speed);
+        setTimeout(function() {
+            changePos(finalPos, bounceSpeed);
+        }, speed);
+    }
+
     function getPos() {
         return parseFloat(getComputedStyle(scrollerBlock)[supportedProps.transform].split(/,\s*/)[4]);
     }
@@ -202,7 +225,7 @@ function SlimeScroller(_this, options) {
             clickTolerance: 5,
             start: function(event, start) {
                 //firefox doesn't want to apply the cursor from `:active` CSS rule, have to add a class :-/
-                addClass(_this, classes.drag);
+                addClass(_this, classes.grabbing);
                 changePos(startPosition = getPos());
             },
             move: function(event, start, diff, speed) {
@@ -217,8 +240,8 @@ function SlimeScroller(_this, options) {
                 changePos(startPosition + diff.x);
             },
             end: function(event, start, diff, speed) {
-                //remove the drag class
-                removeClass(_this, classes.drag);
+                //remove the grabbing class
+                removeClass(_this, classes.grabbing);
 
                 if (Math.abs(diff.x) < 6 && diff.time < 150) return;
 
@@ -233,38 +256,10 @@ function SlimeScroller(_this, options) {
                 var targetSpeed = Math.max(0, transitionSpeed - (overlapDiff / (Math.abs(posDiff) + 1))*transitionSpeed);
 
                 if (targetPosition > 0) {
-                    (function() {
-                        if (targetSpeed) {
-                            changePos(overlap, targetSpeed);
-                            addEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
-                        }
-                        else {
-                            bounceBack();
-                        }
-
-                        function bounceBack() {
-                            changePos(0, bounceSpeed);
-
-                            removeEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
-                        }
-                    })();
+                    bounce(targetSpeed, overlap, 0);
                 }
                 else if (targetPosition < positionMin) {
-                    (function() {
-                        if (targetSpeed) {
-                            changePos(positionMin - overlap, targetSpeed);
-                            addEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
-                        }
-                        else {
-                            bounceBack();
-                        }
-
-                        function bounceBack() {
-                            changePos(positionMin, bounceSpeed);
-
-                            removeEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
-                        }
-                    })();
+                    bounce(targetSpeed, positionMin - overlap, positionMin);
                 }
                 else {
                     changePos(targetPosition, transitionSpeed);
@@ -282,12 +277,12 @@ function SlimeScroller(_this, options) {
         scrollTo(currentPosition, 0);
         if ((!contentFits || !o.disableIfFit) && !burrito) {
             touchInit();
-            addClass(_this, classes.touch);
+            addClass(_this, classes.drag);
         }
-        else if (contentFits && burrito) {
+        else if (contentFits && burrito && o.disableIfFit) {
             burrito.kill();
             burrito = undefined;
-            removeClass(_this, classes.touch);
+            removeClass(_this, classes.drag);
         }
     }
 
@@ -305,7 +300,10 @@ function SlimeScroller(_this, options) {
         //If the UA doesn't support css transforms or transitions -- use fallback functions.
         //Separate functions instead of checks for better performance.
         if (!supportedProps.transform || !!window.opera) setPos = setPosFallback;
-        if (!supportedProps.transition || !!window.opera) changePos = changePosFallback;
+        if (!supportedProps.transition || !!window.opera) {
+            changePos = changePosFallback;
+            bounce = bounceFallback;
+        }
         if (!supportedProps.transform || !!window.opera || !window.getComputedStyle) getPos = getPosFallback;
 
         scrollerBlock = document.createElement('div');
@@ -372,6 +370,17 @@ function SlimeScroller(_this, options) {
         //invoke this when Slime's width or display state is changed
         recalcWidth: onWidthChange
     }
+}
+
+//if jQuery is available -- create a plugin
+if (window.jQuery) {
+    (function($) {
+        $.fn.Slime = function(options) {
+            this.each(function() {
+                $(this).data('Slime', Slime(this, options));
+            });
+        };
+    })(window.jQuery);
 }
 /*!
  * Event Burrito is a touch / mouse / pointer event unifier
