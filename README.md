@@ -71,7 +71,7 @@ Slime can take settings object as an optional second parameter (first when using
       onSetup: undefined
     }
 
-Example:
+###Example
 
     var scroller = Slime(document.getElementById('slime'), {
       borderPadding: 50,
@@ -95,7 +95,7 @@ Scroll to element within the scroller's block.
 
 `element` - HTML node;
 
-`speed` - speed in ms, *optional*.
+`speed` - speed in `ms`, *optional*.
 
 ####`moveElementToViewport(element, padding, speed)`
 
@@ -105,7 +105,7 @@ Move element to viewport.
 
 `padding` - padding from the element to the edge of the container, *optional*;  
 
-`speed` - speed in ms, *optional*.
+`speed` - speed in `ms`, *optional*.
 
 ####`getClicksAllowed()`
 
@@ -113,9 +113,9 @@ Useful when listening for clicks on some inner element. Returns `true` if the cl
 
 ####`recalcWidth()`
 
-Recalculate Slime's width. Usefull when the container width is changed. Width recalculation runs automatically on window resize and device orientation change.
+Recalculate Slime's width. Usefull when Slime's width or `display` property is changed. Width recalculation runs automatically on window resize and device orientation change.
 
-Example:
+###Example
 
     var scroller = Slime(document.getElementById('slime')).
 
