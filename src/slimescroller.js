@@ -1,8 +1,20 @@
 function Slime(_this, options) {
+    //default options
+    var o = {
+        transitionSpeed: 400,
+        cssPrefix: 'slime-',
+        borderPadding: 24,
+        disableIfFit: true,
+        onClick: undefined,
+        onSetup: undefined //setup callback
+    };
+
+    //merge user options into defaults
+    options && mergeObjects(o, options);
+
     var noop = function() {},
-        transitionSpeed = 400,
         bounceSpeed = 300,
-        overlapModifier = 1 / (transitionSpeed / 60),
+        overlapModifier = 1 / (o.transitionSpeed / 60),
         maxOverlap = 150,
         animationTimer,
         scrollerBlock,
@@ -12,18 +24,6 @@ function Slime(_this, options) {
         positionMin,
         burrito,
         currentPosition = 0;
-
-    //default options
-    var o = {
-        cssPrefix: 'slime-',
-        borderPadding: 24,
-        disableIfFit: true,
-        onClick: noop,
-        onSetup: undefined //setup callback
-    };
-
-    //merge user options into defaults
-    options && mergeObjects(o, options);
 
     var classes = {
         inactive: o.cssPrefix + 'inactive',
@@ -190,22 +190,22 @@ function Slime(_this, options) {
             pos = positionMin;
         }
 
-        changePos(pos, speed!==undefined?speed:transitionSpeed);
+        changePos(pos, speed!==undefined?speed:o.transitionSpeed);
     }
 
     function scrollToElement(element, speed) {
-        scrollTo(-element.offsetLeft, speed!==undefined?speed:transitionSpeed);
+        scrollTo(-element.offsetLeft, speed!==undefined?speed:o.transitionSpeed);
     }
 
     function moveElementToViewport(element, padding, speed) {
-        var pos = -element.offsetLeft + (padding || o.borderPadding),
-            width = element.offsetWidth + 2*(padding || o.borderPadding);
+        var pos = -element.offsetLeft + (padding!==undefined?padding:o.borderPadding),
+            width = element.offsetWidth + 2*(padding!==undefined?padding:o.borderPadding);
 
         if (currentPosition < pos) {
-            scrollTo(pos, speed!==undefined?speed:transitionSpeed);  
+            scrollTo(pos, speed!==undefined?speed:o.transitionSpeed);  
         }
         else if (currentPosition - slimeWidth > pos - width) {
-            scrollTo(pos - width + slimeWidth, speed!==undefined?speed:transitionSpeed);
+            scrollTo(pos - width + slimeWidth, speed!==undefined?speed:o.transitionSpeed);
         }
     }
 
@@ -239,13 +239,13 @@ function Slime(_this, options) {
 
                 speed.x /= 2;
 
-                var posDiff = speed.x*Math.pow(Math.abs(speed.x), 0.5)*transitionSpeed/2;
+                var posDiff = speed.x*Math.pow(Math.abs(speed.x), 0.5)*o.transitionSpeed/2;
                 var targetPosition = currentPosition + posDiff;
 
                 var targetOverlap = Math.abs(Math.max(targetPosition, 0) || Math.min((targetPosition - positionMin), 0));
                 var overlap = Math.min(targetOverlap*overlapModifier, maxOverlap);
                 var overlapDiff = targetOverlap - overlap;
-                var targetSpeed = Math.max(0, transitionSpeed - (overlapDiff / (Math.abs(posDiff) + 1))*transitionSpeed);
+                var targetSpeed = Math.max(0, o.transitionSpeed - (overlapDiff / (Math.abs(posDiff) + 1))*o.transitionSpeed);
 
                 if (targetPosition > 0) {
                     bounce(targetSpeed, overlap, 0);
@@ -254,11 +254,11 @@ function Slime(_this, options) {
                     bounce(targetSpeed, positionMin - overlap, positionMin);
                 }
                 else {
-                    changePos(targetPosition, transitionSpeed);
+                    changePos(targetPosition, o.transitionSpeed);
                 }
             },
             click: function(event) {
-                o.onClick(event);
+                o.onClick && o.onClick(event);
             }
         });
     }
@@ -353,7 +353,9 @@ function Slime(_this, options) {
             return burrito.getClicksAllowed();
         },
 
-        scrollTo: scrollTo,
+        scrollTo: function(pos) {
+            scrollTo(parseInt(-pos, 10));
+        },
 
         scrollToElement: scrollToElement,
 
