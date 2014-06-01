@@ -113,7 +113,7 @@ Useful when listening for clicks on some inner element. Returns `true` if the cl
 
 ####`recalcWidth()`
 
-Recalculate Slime's width. Usefull when Slime's width or `display` property is changed. Width recalculation runs automatically on window resize and device orientation change.
+Recalculate Slime's width. Usefull when Slime's width or `display` state is changed. Width recalculation runs automatically on window resize and device orientation change.
 
 ###Example
 
