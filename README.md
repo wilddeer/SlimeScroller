@@ -76,7 +76,7 @@ Example:
     var scroller = Slime(document.getElementById('slime'), {
       borderPadding: 50,
       disableIfFit: false,
-      onSetup: function(n) {
+      onSetup: function() {
         console.log('Slime setup successful!');
       }
     });
