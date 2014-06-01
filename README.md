@@ -85,11 +85,11 @@ Example:
 
 Slime exposes a set of functions upon installation. These functions can be used to controll the scroller externally:
 
-###`scrollTo(pos)`
+####`scrollTo(pos)`
 
 Change scroll position to `pos` (in `px`).
 
-###`scrollToElement(element, speed)`
+####`scrollToElement(element, speed)`
 
 Scroll to element within the scroller's block.
 
@@ -97,7 +97,7 @@ Scroll to element within the scroller's block.
 
 `speed` - speed in ms, *optional*.
 
-###`moveElementToViewport(element, padding, speed)`
+####`moveElementToViewport(element, padding, speed)`
 
 Move element to viewport.
 
@@ -107,11 +107,11 @@ Move element to viewport.
 
 `speed` - speed in ms, *optional*.
 
-###`getClicksAllowed()`
+####`getClicksAllowed()`
 
 Useful when listening for clicks on some inner element. Returns `true` if the click was an actual proper click, or `false` in case it was a result of mousedrag.
 
-###`recalcWidth()`
+####`recalcWidth()`
 
 Recalculate Slime's width. Usefull when the container width is changed. Width recalculation runs automatically on window resize and device orientation change.
 
