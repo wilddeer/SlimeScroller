@@ -21,7 +21,7 @@ Responsive touch-enabled scroller
 
 HTML markup:
 
-    <div class="slime inactive" id="slime">
+    <div class="slime slime-inactive" id="slime">
       <div> ... </div>
 
       <div> ... </div>
@@ -37,7 +37,7 @@ Or javascript + jQuery:
 
     $('.slime').Slime();
     
-`inactive` class is not required. It is replaced with `active` during setup.
+`slime-inactive` class is not required. It is replaced with `slime-active` during setup.
 
 Place anything you want within the Slime's block. All the elements will recieve `display: inline-block`.
 
