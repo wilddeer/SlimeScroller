@@ -19,6 +19,10 @@
             font-weight: normal;
         }
 
+        input {
+        	width: 50px;
+        }
+
 		figure,
 		figcaption,
 		section {
@@ -98,11 +102,29 @@
 
 			<figcaption>it's a cat!</figcaption>
 		</figure>
+
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
+
+			<figcaption>it's a cat!</figcaption>
+		</figure>
 	</div>
 
-	<h2>jQuery, 120px scroll</h2>
+	<h2>jQuery, scroll to 120px</h2>
 
-	<div class="slime jquery-test">
+	<div class="slime jquery-test" style="border: 1px dotted #ccc;">
 		<figure>
 			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
 
@@ -173,13 +195,51 @@
 			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
 
 			<figcaption>it's a cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
+
+			<figcaption>it's a cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
 		</figure>
 	</div>
 
 	<h3>API test</h3>
 
 	<p>
-        <label>Go to: <input type="text" value="350" class="js-goto"></label> <button class="js-go">Go</button>
+        <label>Go to: <input type="text" value="350" class="js-goto"></label>, <lable>speed: <input type="text" value="400" class="js-goto-speed"> ms</label> <button class="js-go">Go</button>
+    </p>
+
+    <p>
+        <label>Go to element #: <input type="text" value="3" class="js-goto-el"></label>, <lable>speed: <input type="text" value="400" class="js-goto-el-speed"> ms</label> <button class="js-go-el">Go</button>
+    </p>
+
+    <p>
+        <label>Move element # <input type="text" value="0" class="js-show-el"> to viewport</label>, <lable>padding: <input type="text" value="16" class="js-show-el-padding"> px</label>, <lable>speed: <input type="text" value="400" class="js-show-el-speed"> ms</label> <button class="js-show">Move</button>
     </p>
 
     <p>
@@ -225,7 +285,15 @@
 		$('.jquery-test').data('Slime').scrollTo(120);
 
 		$('.js-go').click(function() {
-			$('.jquery-test').data('Slime').scrollTo($('.js-goto').val());
+			$('.jquery-test').data('Slime').scrollTo($('.js-goto').val(),  $('.js-goto-speed').val());
+		});
+
+		$('.js-go-el').click(function() {
+			$('.jquery-test').data('Slime').scrollToElement($('.jquery-test .slime-scroller > *')[$('.js-goto-el').val()], $('.js-goto-el-speed').val());
+		});
+
+		$('.js-show').click(function() {
+			$('.jquery-test').data('Slime').moveElementToViewport($('.jquery-test .slime-scroller > *')[$('.js-show-el').val()], $('.js-show-el-padding').val(), $('.js-show-el-speed').val());
 		});
 
 		$('.js-get').click(function() {
