@@ -21,25 +21,59 @@ Responsive touch-enabled scroller
 
 HTML markup:
 
-    <div class="slime slime-inactive" id="slime">
-      <div> ... </div>
+```html
+<div class="slime" id="slime">
+    <div> ... </div>
 
-      <div> ... </div>
+    <div> ... </div>
 
-      <div> ... </div>
-    </div>
+    <div> ... </div>
+</div>
+```
 
 Javascript:
 
-    var scroller = Slime(document.getElementById('slime'));
+```javascript
+var scroller = Slime(document.getElementById('slime'));
+```
 
 Or javascript + jQuery:
 
-    $('.slime').Slime();
-    
-`slime-inactive` class is not required. It is replaced with `slime-active` during setup.
+```javascript
+$('.slime').Slime();
+```
 
 Place anything you want within the Slime's block. All the elements will recieve `display: inline-block`.
+
+##Classes
+
+You can use these optional classes to modify the scrollers behaviour:
+
+####`slime-inactive`
+
+Does nothing by default. Removed after Slime initialization. Used to modify fallback styles in case Slime faild to initialize for whatever reason.
+
+####`slime-left` and `slime-right`
+
+Applies `text-align: left / right` to the container. Content will stick to the left/right side in case it fits into the container. Default is center.
+
+###Example
+
+```html
+<div class="slime slime-inactive slime-left" id="slime">
+    <div> ... </div>
+
+    <div> ... </div>
+
+    <div> ... </div>
+</div>
+
+<style>
+    .slime-inactive {
+        display: none; /* fuck you, progressive enhancement! */
+    }
+</style>
+```
 
 ##Settings
 
