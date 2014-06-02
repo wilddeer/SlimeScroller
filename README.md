@@ -47,7 +47,7 @@ Place anything you want within the Slime's block. All the elements will recieve 
 
 ##Classes
 
-You can use these optional classes to modify the scrollers behaviour:
+You can use these optional classes to modify the scroller's behaviour:
 
 ####`slime-inactive`
 
