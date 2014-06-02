@@ -1,6 +1,6 @@
 /*!
  * Slime touch scroller
- * v. 0.11.4 | https://github.com/wilddeer/SlimeScroller
+ * v. 0.11.5 | https://github.com/wilddeer/SlimeScroller
  * Copyright Oleg Korsunsky | http://wd.dizaina.net/
  *
  * Depends on Event Burrito (included) | https://github.com/wilddeer/Event-Burrito
@@ -11,7 +11,8 @@ function Slime(_this, options) {
 
     //default options
     var o = {
-        transitionSpeed: 400,
+        transitionTime: 600,
+        bounceTime: 400,
         cssPrefix: 'slime-',
         borderPadding: 16,
         disableIfFit: true,
@@ -23,8 +24,7 @@ function Slime(_this, options) {
     //merge user options into defaults
     options && mergeObjects(o, options);
 
-    var bounceSpeed = 300,
-        overlapModifier = 1 / (o.transitionSpeed / 60),
+    var overlapModifier = 1 / (o.transitionTime / 60),
         maxOverlap = 150,
         animationTimer,
         scrollerBlock,
@@ -173,7 +173,7 @@ function Slime(_this, options) {
         }
 
         function bounceBack() {
-            changePos(finalPos, bounceSpeed);
+            changePos(finalPos, o.bounceTime);
 
             removeEvent(scrollerBlock, 'transitionend webkitTransitionEnd', bounceBack);
         }
@@ -182,7 +182,7 @@ function Slime(_this, options) {
     function bounceFallback(speed, turnPos, finalPos) {
         speed && changePos(turnPos, speed);
         setTimeout(function() {
-            changePos(finalPos, bounceSpeed);
+            changePos(finalPos, o.bounceTime);
         }, speed);
     }
 
@@ -202,7 +202,7 @@ function Slime(_this, options) {
             pos = positionMin;
         }
 
-        changePos(pos, speed!==undefined? parseInt(speed, 10): o.transitionSpeed);
+        changePos(pos, speed!==undefined? parseInt(speed, 10): o.transitionTime);
     }
 
     function moveElementToViewport(element, padding, speed) {
@@ -250,13 +250,13 @@ function Slime(_this, options) {
 
                 speed.x /= 2;
 
-                var posDiff = speed.x*Math.pow(Math.abs(speed.x), 0.5)*o.transitionSpeed/2;
+                var posDiff = speed.x*Math.pow(Math.abs(speed.x), 0.5)*o.transitionTime/2;
                 var targetPosition = currentPosition + posDiff;
 
                 var targetOverlap = Math.abs(Math.max(targetPosition, 0) || Math.min((targetPosition - positionMin), 0));
                 var overlap = Math.min(targetOverlap*overlapModifier, maxOverlap);
                 var overlapDiff = targetOverlap - overlap;
-                var targetSpeed = Math.max(0, o.transitionSpeed - (overlapDiff / (Math.abs(posDiff) + 1))*o.transitionSpeed);
+                var targetSpeed = Math.max(0, o.transitionTime - (overlapDiff / (Math.abs(posDiff) + 1))*o.transitionTime);
 
                 if (targetPosition > 0) {
                     bounce(targetSpeed, overlap, 0);
@@ -265,7 +265,7 @@ function Slime(_this, options) {
                     bounce(targetSpeed, positionMin - overlap, positionMin);
                 }
                 else {
-                    changePos(targetPosition, o.transitionSpeed);
+                    changePos(targetPosition, o.transitionTime);
                 }
             },
             click: function(event) {

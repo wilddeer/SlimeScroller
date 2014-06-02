@@ -81,11 +81,17 @@ Slime can take settings object as an optional second parameter (first when using
 
 ###Options
 
-####`transitionSpeed`
+####`transitionTime`
+
+*integer, defaut: `600`*
+
+Transition time in `ms`.
+
+####`bounceTime`
 
 *integer, defaut: `400`*
 
-Transition time in `ms`.
+Bounce time in `ms`.
 
 ####`cssPrefix`
 

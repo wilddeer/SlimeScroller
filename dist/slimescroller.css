@@ -45,6 +45,9 @@
 	display: inline-block;
 	position: relative;
 	min-width: 100%;
+	-moz-transition-timing-function: cubic-bezier(0.12,0.18,0.25,1);
+	-webkit-transition-timing-function: cubic-bezier(0.12,0.18,0.25,1);
+	transition-timing-function: cubic-bezier(0.12,0.18,0.25,1);
 	/* ie7 fallback */
 	*display: inline;
 	zoom: 1;
@@ -58,8 +61,8 @@
 .slime.slime-active,
 .slime.slime-active .slime-scroller {
 	-webkit-transform: translate3d(0,0,0);
-	-ms-transform: translate3d(0,0,0);
 	-moz-transform: translate3d(0,0,0);
+	-ms-transform: translate3d(0,0,0);
 	transform: translate3d(0,0,0);
 	-webkit-backface-visibility: hidden;
 	-moz-backface-visibility: hidden;
