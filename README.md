@@ -49,23 +49,25 @@ Slime can take settings object as an optional second parameter (first when using
 
 ####`transitionSpeed`
 
-*integer*, *defaut: `400`*
+*integer, defaut: `400`*
 
 Transition time in `ms`.
 
-####`cssPrefix` *string*
+####`cssPrefix`
+
+*string, default: `slime-`*
 
 Prefix to be used with Slime classes, such as `inactive`, `active`, `drag`, etc. Don't forget to change the stylesheet appropriately!
 
 ####`borderPadding`
 
-*integer*, *defaut: `24`*
+*integer, defaut: `24`*
 
 Determines padding (in `px`) from the element to the edge of the container when using `scrollToElement()` (see API) or in case some inner element catches focus.
       
 ####`disableIfFit`
 
-*bool*, *default: `true`*
+*bool, default: `true`*
 
 Disable dragging if content fits into the container.
 
