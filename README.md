@@ -95,7 +95,7 @@ Prefix to be used with Slime classes, such as `inactive`, `active`, `drag`, etc.
 
 ####`borderPadding`
 
-*integer, defaut: `24`*
+*integer, defaut: `16`*
 
 Determines padding (in `px`) from the element to the edge of the container when using `scrollToElement()` (see API) or in case some inner element catches focus.
       
@@ -157,9 +157,11 @@ $('#slime').Slime({
 
 Slime exposes a set of functions upon installation. These functions can be used to controll the scroller externally:
 
-####`scrollTo(pos)`
+####`scrollTo(pos, speed)`
 
-`pos` - *integer,* position in `px` to scroll to.
+`pos` - *integer,* position in `px` to scroll to;
+
+`speed` - *integer, optional,* speed in `ms`.
 
 Change scroll position.
 
@@ -167,7 +169,7 @@ Change scroll position.
 
 `element` - *HTML node;*
 
-`speed` - *optional,* speed in `ms`.
+`speed` - *integer, optional,* speed in `ms`.
 
 Scroll to element within the scroller's block.
 
