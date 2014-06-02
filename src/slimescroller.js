@@ -1,19 +1,21 @@
 function Slime(_this, options) {
+    var noop = function() {};
+
     //default options
     var o = {
         transitionSpeed: 400,
         cssPrefix: 'slime-',
         borderPadding: 24,
         disableIfFit: true,
-        onClick: undefined,
-        onSetup: undefined //setup callback
+        onClick: noop,
+        onSetup: noop, //setup callback
+        onPosChange: noop
     };
 
     //merge user options into defaults
     options && mergeObjects(o, options);
 
-    var noop = function() {},
-        bounceSpeed = 300,
+    var bounceSpeed = 300,
         overlapModifier = 1 / (o.transitionSpeed / 60),
         maxOverlap = 150,
         animationTimer,
@@ -142,6 +144,7 @@ function Slime(_this, options) {
         scrollerBlock.style[supportedProps.transform] = 'translateX('+pos+'px)';
 
         currentPosition = pos;
+        o.onPosChange(-pos);
     }
 
     //`setPos` fallback for UAs with no CSS transforms support
@@ -149,6 +152,7 @@ function Slime(_this, options) {
         scrollerBlock.style.left = pos+'px';
 
         currentPosition = pos;
+        o.onPosChange(-pos);
     }
 
     function bounce(speed, turnPos, finalPos) {
@@ -258,7 +262,7 @@ function Slime(_this, options) {
                 }
             },
             click: function(event) {
-                o.onClick && o.onClick(event);
+                o.onClick(event);
             }
         });
     }
@@ -338,7 +342,7 @@ function Slime(_this, options) {
 
         //API callback, timeout to expose the API first
         setTimeout(function() {
-            o.onSetup && o.onSetup();
+            o.onSetup();
         }, 0);
     }
 
@@ -346,10 +350,6 @@ function Slime(_this, options) {
 
     //expose the API
     return {
-        getClicksAllowed: function() {
-            return burrito.getClicksAllowed();
-        },
-
         scrollTo: function(pos) {
             scrollTo(parseInt(-pos, 10));
         },
@@ -357,6 +357,14 @@ function Slime(_this, options) {
         scrollToElement: scrollToElement,
 
         moveElementToViewport: moveElementToViewport,
+
+        getClicksAllowed: function() {
+            return burrito.getClicksAllowed();
+        },
+
+        getPos: function() {
+            return -getPos();
+        },
 
         //invoke this when Slime's width or display state is changed
         recalcWidth: onWidthChange
@@ -370,6 +378,8 @@ if (window.jQuery) {
             this.each(function() {
                 $(this).data('Slime', Slime(this, options));
             });
+
+            return this;
         };
     })(window.jQuery);
 }
