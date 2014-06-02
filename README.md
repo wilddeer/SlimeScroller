@@ -217,6 +217,10 @@ scroller.Slime();
 //scroll 120px from the start
 scroller.data('Slime').scrollTo(120);
 ```
+
+##Using Slime scroller?
+
+Drop me a link &rarr; [:envelope: wd@dizaina.net](mailto:wd@dizaina.net).
     
 ##License
 
