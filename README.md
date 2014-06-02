@@ -43,43 +43,79 @@ Place anything you want within the Slime's block. All the elements will recieve 
 
 ##Settings
 
-Slime can take settings object as an optional second parameter (first when using jQuery). Default settings:
+Slime can take settings object as an optional second parameter (first when using jQuery).
 
-    {
-      //transition time, ms
-      transitionSpeed: 400,
+###Options
 
-      //Prefix to be used with Slime classes,
-      //such as `inactive`, `active`, `drag`, etc.
-      //Don't forget to change the stylesheet appropriately!
-      cssPrefix: 'slime-',
+####`transitionSpeed`
 
-      //determines padding (in px) from the element to the edge of the container
-      //when using `scrollToElement()` (see API) or in case some inner element
-      //catches focus
-      borderPadding: 24,
+*integer*, *defaut: `400`*
+
+Transition time in `ms`.
+
+####`cssPrefix` *string*
+
+Prefix to be used with Slime classes, such as `inactive`, `active`, `drag`, etc. Don't forget to change the stylesheet appropriately!
+
+####`borderPadding`
+
+*integer*, *defaut: `24`*
+
+Determines padding (in `px`) from the element to the edge of the container when using `scrollToElement()` (see API) or in case some inner element catches focus.
       
-      //disable dragging if content fits into the container
-      disableIfFit: true,
+####`disableIfFit`
 
-      //Callback function, invoked when proper click happens
-      //(not during or immediately after mousedrag).
-      //Recieves click event object as a parameter
-      onClick: undefined,
-    
-      //callback function, invoked after setup
-      onSetup: undefined
-    }
+*bool*, *default: `true`*
 
-###Example
+Disable dragging if content fits into the container.
 
-    var scroller = Slime(document.getElementById('slime'), {
-      borderPadding: 50,
-      disableIfFit: false,
-      onSetup: function() {
-        console.log('Slime setup successful!');
-      }
-    });
+###Callbacks
+
+####`onClick`
+
+*function(event)*
+
+Callback function, invoked when proper click happens (not during or immediately after mousedrag). Recieves click event object as a parameter.
+
+####`onSetup`
+
+*function()*
+
+Callback function, invoked after setup.
+
+####`onPosChange`
+
+*function(pos)*
+
+Callback function, invoked when scroller position is changed. Recieves position as a parameter.
+
+Don't put anything heavy in this one, as it directly influences scroller's performance.
+
+###Examples
+
+JS:
+
+```javascript
+var scroller = Slime(document.getElementById('slime'), {
+  borderPadding: 50,
+  disableIfFit: false,
+  onSetup: function() {
+    console.log('Slime setup successful!');
+  }
+});
+```
+
+JS + jQuery:
+
+```javascript
+$('#slime').Slime({
+  borderPadding: 50,
+  disableIfFit: false,
+  onSetup: function() {
+    console.log('Slime setup successful!');
+  }
+});
+```
 
 ##API
 
@@ -111,16 +147,38 @@ Move element to viewport.
 
 Useful when listening for clicks on some inner element. Returns `true` if the click was an actual proper click, or `false` in case it was a result of mousedrag.
 
+####`getPos()`
+
+Returns current position of the scroller.
+
 ####`recalcWidth()`
 
 Recalculate Slime's width. Usefull when Slime's width or `display` state is changed. Width recalculation runs automatically on window resize and device orientation change.
 
-###Example
+###Examples
 
-    var scroller = Slime(document.getElementById('slime')).
+JS:
 
-    //scroll 120px from the start
-    scroller.scrollTo(120);
+```javascript
+//init SLime scroller and save the API object
+var scroller = Slime(document.getElementById('slime'));
+
+//scroll 120px from the start
+scroller.scrollTo(120);
+```
+
+JS + jQuery:
+
+```javascript
+//save jQuery link to scroller's block
+var scroller = $('#slime');
+
+//init Slime scroller
+scroller.Slime();
+
+//scroll 120px from the start
+scroller.data('Slime').scrollTo(120);
+```
     
 ##License
 
