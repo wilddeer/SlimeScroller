@@ -311,8 +311,8 @@ function Slime(_this, options) {
         var images = scrollerBlock.getElementsByTagName('img');
 
         for (var i = images.length - 1; i >= 0; i--) {
-            addEvent(scrollerBlock, 'load error', onWidthChange);
-        };
+            addEvent(images[i], 'load error', onWidthChange)
+        }
 
         //prevent focus bug (see http://wd.dizaina.net/en/internet-maintenance/js-sliders-and-the-tab-key/)
         //and move focused element to viewport
@@ -329,11 +329,8 @@ function Slime(_this, options) {
         addClass(_this, classes.active);
         removeClass(_this, classes.inactive);
 
-        //get widths
+        //get widths and init touch if necessary
         onWidthChange();
-
-        //init touch events
-        //touchInit();
 
         //watch for width changes
         addEvent(window, 'resize', onWidthChange);
