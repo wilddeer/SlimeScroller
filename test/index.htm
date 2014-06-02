@@ -42,7 +42,7 @@
 <body>
 	<h1>Tests!</h1>
 
-	<h3>Vanilla JS</h3>
+	<h2>Vanilla JS</h2>
 
 	<div class="slime slime-inactive" id="slime">
 		<figure>
@@ -98,27 +98,9 @@
 
 			<figcaption>it's a cat!</figcaption>
 		</figure>
-
-		<figure>
-			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
-
-			<figcaption>cat!</figcaption>
-		</figure>
-
-		<figure>
-			<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
-
-			<figcaption>cat!</figcaption>
-		</figure>
-
-		<figure>
-			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
-
-			<figcaption>it's a cat!</figcaption>
-		</figure>
 	</div>
 
-	<h3>jQuery</h3>
+	<h2>jQuery, 120px scroll</h2>
 
 	<div class="slime jquery-test">
 		<figure>
@@ -174,9 +156,41 @@
 
 			<figcaption>it's a cat!</figcaption>
 		</figure>
+
+		<figure>
+			<a href="pics/1.jpg" target="_blank"><img src="pics/p1.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/2.jpg" target="_blank"><img src="pics/p2.jpg" alt="cat!"></a>
+
+			<figcaption>cat!</figcaption>
+		</figure>
+
+		<figure>
+			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
+
+			<figcaption>it's a cat!</figcaption>
+		</figure>
 	</div>
 
-	<h3>disableIfFit: false, slime-right</h3>
+	<h3>API test</h3>
+
+	<p>
+        <label>Go to: <input type="text" value="350" class="js-goto"></label> <button class="js-go">Go</button>
+    </p>
+
+    <p>
+        <button class="js-get">Get pos</button> <input type="text" value="" class="js-getpos"></label> 
+    </p>
+
+    <p>
+        onPosChange: <span class="js-pos">?</span>;
+    </p>
+
+	<h2>disableIfFit: false, slime-right</h2>
 
 	<div class="slime slime-right right-test">
 		<figure>
@@ -186,7 +200,7 @@
 		</figure>
 	</div>
 
-	<h3>slime-left</h3>
+	<h2>slime-left</h2>
 
 	<div class="slime slime-left left-test">
 		<figure>
@@ -196,15 +210,29 @@
 		</figure>
 	</div>
 
-	<h2>API test</h2>
-
 	<script src="js/jquery-1.10.2.min.js"></script>
 	<script src="../dist/slimescroller.js"></script>
 
 	<script>
 		Slime(document.getElementById('slime'));
 
-		$('.jquery-test').Slime();
+		$('.jquery-test').Slime({
+			onPosChange: function(pos) {
+				$('.js-pos').text(pos);
+			}
+		});
+
+		$('.jquery-test').data('Slime').scrollTo(120);
+
+		$('.js-go').click(function() {
+			$('.jquery-test').data('Slime').scrollTo($('.js-goto').val());
+		});
+
+		$('.js-get').click(function() {
+			$('.js-getpos').val($('.jquery-test').data('Slime').getPos());
+		});
+
+
 		$('.right-test').Slime({
 			disableIfFit: false
 		});
