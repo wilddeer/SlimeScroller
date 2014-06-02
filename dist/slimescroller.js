@@ -206,14 +206,11 @@ function Slime(_this, options) {
     }
 
     function moveElementToViewport(element, padding, speed) {
-        console.log(element, padding, speed);
         if (!element || !element.offsetLeft) return;
 
         var pad = padding!==undefined? parseInt(padding, 10): o.borderPadding,
             pos = -element.offsetLeft + pad,
             width = element.offsetWidth + 2*pad;
-
-        console.log(pos, width);
 
         if (currentPosition < pos) {
             scrollTo(pos, speed);  
