@@ -125,25 +125,25 @@ Slime exposes a set of functions upon installation. These functions can be used 
 
 ####`scrollTo(pos)`
 
-`pos` - *integer*, position in `px` to scroll to.
+`pos` - *integer,* position in `px` to scroll to.
 
 Change scroll position.
 
 ####`scrollToElement(element, speed)`
 
-`element` - HTML node;
+`element` - *HTML node;*
 
-`speed` - speed in `ms`, *optional*.
+`speed` - *optional,* speed in `ms`.
 
 Scroll to element within the scroller's block.
 
 ####`moveElementToViewport(element, padding, speed)`
 
-`element` - *HTML node*;
+`element` - *HTML node;*
 
-`padding` - *integer*, *optional*, padding from the element to the edge of the container;  
+`padding` - *integer, optional,* padding from the element to the edge of the container;  
 
-`speed` - *integer*, *optional*, speed in `ms`.
+`speed` - *integer, optional,* speed in `ms`.
 
 Move element to viewport.
 
