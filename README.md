@@ -57,7 +57,7 @@ Does nothing by default. Removed after Slime initialization. Used to modify fall
 
 Applies `text-align: left / right` to the container. Content will stick to the left/right side in case it fits into the container. Default is center.
 
-###Example
+####Example
 
 ```html
 <div class="slime slime-inactive slime-left" id="slime">
@@ -127,7 +127,7 @@ Callback function, invoked when scroller position is changed. Recieves position 
 
 Don't put anything heavy in this one, as it directly influences scroller's performance.
 
-###Examples
+####Examples
 
 JS:
 
@@ -193,7 +193,7 @@ Returns current position of the scroller.
 
 Recalculate Slime's width. Usefull when Slime's width or `display` state is changed. Width recalculation runs automatically on window resize and device orientation change.
 
-###Examples
+####Examples
 
 JS:
 
