@@ -1,6 +1,6 @@
 /*!
  * Slime touch scroller
- * v. 0.11.3 | https://github.com/wilddeer/SlimeScroller
+ * v. 0.11.4 | https://github.com/wilddeer/SlimeScroller
  * Copyright Oleg Korsunsky | http://wd.dizaina.net/
  *
  * Depends on Event Burrito | https://github.com/wilddeer/Event-Burrito
@@ -13,7 +13,7 @@ function Slime(_this, options) {
     var o = {
         transitionSpeed: 400,
         cssPrefix: 'slime-',
-        borderPadding: 24,
+        borderPadding: 16,
         disableIfFit: true,
         onClick: noop,
         onSetup: noop, //setup callback
@@ -202,22 +202,24 @@ function Slime(_this, options) {
             pos = positionMin;
         }
 
-        changePos(pos, speed!==undefined?speed:o.transitionSpeed);
-    }
-
-    function scrollToElement(element, speed) {
-        scrollTo(-element.offsetLeft, speed!==undefined?speed:o.transitionSpeed);
+        changePos(pos, speed!==undefined? parseInt(speed, 10): o.transitionSpeed);
     }
 
     function moveElementToViewport(element, padding, speed) {
-        var pos = -element.offsetLeft + (padding!==undefined?padding:o.borderPadding),
-            width = element.offsetWidth + 2*(padding!==undefined?padding:o.borderPadding);
+        console.log(element, padding, speed);
+        if (!element || !element.offsetLeft) return;
+
+        var pad = padding!==undefined? parseInt(padding, 10): o.borderPadding,
+            pos = -element.offsetLeft + pad,
+            width = element.offsetWidth + 2*pad;
+
+        console.log(pos, width);
 
         if (currentPosition < pos) {
-            scrollTo(pos, speed!==undefined?speed:o.transitionSpeed);  
+            scrollTo(pos, speed);  
         }
         else if (currentPosition - slimeWidth > pos - width) {
-            scrollTo(pos - width + slimeWidth, speed!==undefined?speed:o.transitionSpeed);
+            scrollTo(pos - width + slimeWidth, speed);
         }
     }
 
@@ -358,11 +360,15 @@ function Slime(_this, options) {
 
     //expose the API
     return {
-        scrollTo: function(pos) {
-            scrollTo(parseInt(-pos, 10));
+        scrollTo: function(pos, speed) {
+            scrollTo(parseInt(-pos, 10), speed);
         },
 
-        scrollToElement: scrollToElement,
+        scrollToElement: function(element, speed) {
+            if (!element || !element.offsetLeft) return;
+
+            scrollTo(-element.offsetLeft, speed);
+        },
 
         moveElementToViewport: moveElementToViewport,
 
