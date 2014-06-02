@@ -55,7 +55,7 @@ Transition time in `ms`.
 
 ####`cssPrefix`
 
-*string, default: `slime-`*
+*string, default: `'slime-'`*
 
 Prefix to be used with Slime classes, such as `inactive`, `active`, `drag`, etc. Don't forget to change the stylesheet appropriately!
 
