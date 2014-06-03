@@ -4,7 +4,7 @@ Responsive touch-enabled scroller
 
 - Works with mouse, [Touch Events](http://www.w3.org/TR/touch-events/), [Pointer Events](http://www.w3.org/TR/pointerevents/), old [IE10 Pointer Events](http://msdn.microsoft.com/en-us/library/ie/hh673557\(v=vs.85\).aspx)
 - Responsive, works on iPhones, Androids, Windows Phones, Blackberries, Windows 8 devices
-- IE7+ compatible
+- IE8+ compatible
 - Library agnostic. If jQuery is available, registers itself as a plugin.
 - Uses CSS3 transforms &amp; animations, falls back to timer animations when necessary
 - Only 6.5 Kb minified

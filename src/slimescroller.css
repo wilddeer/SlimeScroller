@@ -15,6 +15,7 @@
 .slime > *,
 .slime .slime-scroller > * {
 	display: inline-block;
+	vertical-align: top;
 }
 
 .slime.slime-active {
@@ -46,9 +47,10 @@
 	-moz-transition-timing-function: cubic-bezier(0.12,0.18,0.25,1);
 	-webkit-transition-timing-function: cubic-bezier(0.12,0.18,0.25,1);
 	transition-timing-function: cubic-bezier(0.12,0.18,0.25,1);
-	/* ie7 fallback */
-	*display: inline;
-	zoom: 1;
+}
+
+.slime.slime-active .slime-scroller > * {
+	white-space: normal;
 }
 
 .slime.slime-active a:active,

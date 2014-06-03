@@ -31,6 +31,7 @@
 
 		figure {
 			margin: 1em;
+			max-width: 450px;
 		}
 
 		a img {
@@ -64,7 +65,7 @@
 		<figure>
 			<a href="pics/3.jpg" target="_blank"><img src="pics/p3.jpg" alt="it's a cat!"></a>
 
-			<figcaption>it's a cat!</figcaption>
+			<figcaption>it's a cat! it's a cat! it's a cat! it's a cat! it's a cat! it's a cat! it's a cat! it's a cat! it's a cat! it's a cat! it's a cat!</figcaption>
 		</figure>
 
 		<figure>
@@ -229,7 +230,7 @@
     </p>
 
     <p>
-        onPosChange: <span class="js-pos">?</span>;
+        onPosChange: <input type="text" value="?" class="js-pos">
     </p>
 
 	<h2>disableIfFit: false, slime-right</h2>
@@ -260,7 +261,7 @@
 
 		$('.jquery-test').Slime({
 			onPosChange: function(pos) {
-				$('.js-pos').text(pos);
+				$('.js-pos').val(pos);
 			}
 		});
 

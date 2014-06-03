@@ -267,7 +267,7 @@ function Slime(_this, options) {
     }
 
     function onWidthChange() {
-        getWidths();
+        recalcWidths();
         checkFit();
         scrollTo(currentPosition, 0);
         if ((!contentFits || !o.disableIfFit) && !burrito) {
@@ -281,10 +281,28 @@ function Slime(_this, options) {
         }
     }
 
-    function getWidths() {
+    function recalcWidths() {
         slimeWidth = _this.offsetWidth;
-        contentWidth = scrollerBlock.offsetWidth;
+        
+        contentWidth = Math.max(slimeWidth, getContentWidth());
+
         positionMin = slimeWidth - contentWidth;
+    }
+
+    function getContentWidth() {
+        var width = 0;
+
+        for (var i = scrollerBlock.children.length - 1; i >= 0; i--) {
+            width += scrollerBlock.children[i].offsetWidth +
+                            parseFloat(getComputedStyle(scrollerBlock.children[i]).marginLeft, 10) +
+                            parseFloat(getComputedStyle(scrollerBlock.children[i]).marginRight, 10);
+        };
+
+        return width;
+    }
+
+    function getContentWidthFallback() {
+        return scrollerBlock.scrollWidth;
     }
 
     function checkFit() {
@@ -300,6 +318,7 @@ function Slime(_this, options) {
             bounce = bounceFallback;
         }
         if (!supportedProps.transform || !!window.opera || !window.getComputedStyle) getPos = getPosFallback;
+        if (!window.getComputedStyle) getContentWidth = getContentWidthFallback;
 
         scrollerBlock = document.createElement('div');
 
