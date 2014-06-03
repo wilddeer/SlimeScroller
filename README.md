@@ -51,7 +51,7 @@ You can use these optional classes to modify the scroller's behaviour:
 
 ####`slime-inactive`
 
-Does nothing by default. Removed after Slime initialization. Used to modify fallback styles in case Slime faild to initialize for whatever reason.
+Does nothing by default. Removed after Slime initialization. Used to modify fallback styles in case Slime failed to initialize for whatever reason.
 
 ####`slime-left` and `slime-right`
 
