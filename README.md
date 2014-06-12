@@ -1,5 +1,7 @@
 #Slime touch scroller
 
+:heavy_exclamation_mark: Still in early development, use with caution
+
 Responsive touch-enabled scroller
 
 - Works with mouse, [Touch Events](http://www.w3.org/TR/touch-events/), [Pointer Events](http://www.w3.org/TR/pointerevents/), old [IE10 Pointer Events](http://msdn.microsoft.com/en-us/library/ie/hh673557\(v=vs.85\).aspx)
