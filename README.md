@@ -1,6 +1,6 @@
 # Slime touch scroller
 
-:heavy_exclamation_mark: Unfinished project ¯\\_(ツ)\_/¯ Use with caution
+**:heavy_exclamation_mark: Unfinished project ¯\\_(ツ)\_/¯ Use with caution**
 
 Responsive touch-enabled scroller
 
