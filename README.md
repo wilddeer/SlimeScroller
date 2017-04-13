@@ -135,7 +135,7 @@ Callback function, invoked when scroller position is changed. Recieves position 
 
 Don't put anything heavy in this one, as it directly influences scroller's performance.
 
-#### Examples
+### Examples
 
 JS:
 
