@@ -1,6 +1,6 @@
-#Slime touch scroller
+# Slime touch scroller
 
-:heavy_exclamation_mark: Still in early development, use with caution
+:heavy_exclamation_mark: Unfinished project ¯\\_(ツ)\_/¯ Use with caution
 
 Responsive touch-enabled scroller
 
@@ -14,12 +14,12 @@ Responsive touch-enabled scroller
 - API and callback functions for extensibility
 - [Doesn't break](http://wd.dizaina.net/en/internet-maintenance/js-sliders-and-the-tab-key/) when <kbd>tab</kbd>&rsquo;bing
 
-##Kit
+## Kit
 
 - **[slimescroller.min.js](https://raw.github.com/wilddeer/SlimeScroller/master/dist/slimescroller.min.js)** -- minified production script
 - **[slimescroller.css](https://raw.github.com/wilddeer/SlimeScroller/master/dist/slimescroller.css)** -- styles required for proper functioning
 
-##Usage
+## Usage
 
 HTML markup:
 
@@ -47,19 +47,19 @@ $('.slime').Slime();
 
 Place anything you want within the Slime's block. All the elements will recieve `display: inline-block`.
 
-##Classes
+## Classes
 
 You can use these optional classes to modify the scroller's behaviour:
 
-####`slime-inactive`
+### `slime-inactive`
 
 Does nothing by default. Removed after Slime initialization. Used to modify fallback styles in case Slime failed to initialize for whatever reason.
 
-####`slime-left` and `slime-right`
+### `slime-left` and `slime-right`
 
 Applies `text-align: left / right` to the container. Content will stick to the left/right side in case it fits into the container. Default is center.
 
-####Example
+#### Example
 
 ```html
 <div class="slime slime-inactive slime-left" id="slime">
@@ -77,57 +77,57 @@ Applies `text-align: left / right` to the container. Content will stick to the l
 </style>
 ```
 
-##Settings
+## Settings
 
 Slime can take settings object as an optional second parameter (first when using jQuery).
 
-###Options
+### Options
 
-####`transitionTime`
+#### `transitionTime`
 
 *integer, defaut: `600`*
 
 Transition time in `ms`.
 
-####`bounceTime`
+#### `bounceTime`
 
 *integer, defaut: `400`*
 
 Bounce time in `ms`.
 
-####`cssPrefix`
+#### `cssPrefix`
 
 *string, default: `'slime-'`*
 
 Prefix to be used with Slime classes, such as `inactive`, `active`, `drag`, etc. Don't forget to change the stylesheet appropriately!
 
-####`borderPadding`
+#### `borderPadding`
 
 *integer, defaut: `16`*
 
 Determines padding (in `px`) from the element to the edge of the container when using `scrollToElement()` (see API) or in case some inner element catches focus.
       
-####`disableIfFit`
+#### `disableIfFit`
 
 *bool, default: `true`*
 
 Disable dragging if content fits into the container.
 
-###Callbacks
+### Callbacks
 
-####`onClick`
+#### `onClick`
 
 *function(event)*
 
 Callback function, invoked when proper click happens (not during or immediately after mousedrag). Recieves click event object as a parameter.
 
-####`onSetup`
+#### `onSetup`
 
 *function()*
 
 Callback function, invoked after setup.
 
-####`onPosChange`
+#### `onPosChange`
 
 *function(pos)*
 
@@ -135,7 +135,7 @@ Callback function, invoked when scroller position is changed. Recieves position 
 
 Don't put anything heavy in this one, as it directly influences scroller's performance.
 
-####Examples
+#### Examples
 
 JS:
 
@@ -161,11 +161,11 @@ $('#slime').Slime({
 });
 ```
 
-##API
+## API
 
 Slime exposes a set of functions upon installation. These functions can be used to controll the scroller externally:
 
-####`scrollTo(pos, speed)`
+### `scrollTo(pos, speed)`
 
 `pos` - *integer,* position in `px` to scroll to;
 
@@ -173,7 +173,7 @@ Slime exposes a set of functions upon installation. These functions can be used 
 
 Change scroll position.
 
-####`scrollToElement(element, speed)`
+### `scrollToElement(element, speed)`
 
 `element` - *HTML node;*
 
@@ -181,7 +181,7 @@ Change scroll position.
 
 Scroll to element within the scroller's block.
 
-####`moveElementToViewport(element, padding, speed)`
+### `moveElementToViewport(element, padding, speed)`
 
 `element` - *HTML node;*
 
@@ -191,19 +191,19 @@ Scroll to element within the scroller's block.
 
 Move element to viewport.
 
-####`getClicksAllowed()`
+### `getClicksAllowed()`
 
 Useful when listening for clicks on some inner element. Returns `true` if the click was an actual proper click, or `false` in case it was a result of mousedrag.
 
-####`getPos()`
+### `getPos()`
 
 Returns current position of the scroller.
 
-####`recalcWidth()`
+### `recalcWidth()`
 
 Recalculate Slime's width. Usefull when Slime's width or `display` state is changed. Width recalculation runs automatically on window resize and device orientation change.
 
-####Examples
+### Examples
 
 JS:
 
@@ -227,11 +227,7 @@ scroller.Slime();
 //scroll 120px from the start
 scroller.data('Slime').scrollTo(120);
 ```
-
-##Using Slime scroller?
-
-Drop me a link &rarr; [:envelope: wd@dizaina.net](mailto:wd@dizaina.net).
     
-##License
+## License
 
 [MIT license](http://opensource.org/licenses/MIT).
